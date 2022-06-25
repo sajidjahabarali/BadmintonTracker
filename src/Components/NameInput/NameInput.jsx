@@ -14,6 +14,7 @@ function NameInput(props) {
         id="outlined-basic"
         label="Enter player name"
         variant="outlined"
+        value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);
         }}
@@ -22,6 +23,7 @@ function NameInput(props) {
         variant="text"
         onClick={() => {
           props.addPlayer(getInputValue());
+          setInputValue("");
         }}
       >
         Add name
