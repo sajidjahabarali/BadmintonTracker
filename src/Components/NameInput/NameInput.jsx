@@ -1,17 +1,16 @@
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import {
-  addPlayer,
-  addGameToPlayer,
-} from "../../redux/Players/players.actions";
+import { addPlayer } from "../../redux/Players/players.actions";
 
-function NameInput() {
+function NameInput(props) {
   const [inputValue, setInputValue] = useState("");
-  const getInputValue = () => {
-    console.log(inputValue);
-  };
+  const getInputValue = () => inputValue;
+
+  useEffect(() => {
+    console.log(props.players);
+  });
 
   return (
     <div>
@@ -26,7 +25,7 @@ function NameInput() {
       <Button
         variant="text"
         onClick={() => {
-          getInputValue();
+          props.addPlayer(getInputValue());
         }}
       >
         Add name
@@ -35,4 +34,18 @@ function NameInput() {
   );
 }
 
-export default NameInput;
+const mapStateToProps = (state) => {
+  return {
+    players: state.players,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addPlayer: (payload) => {
+      dispatch(addPlayer(payload));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NameInput);

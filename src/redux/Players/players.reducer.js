@@ -1,21 +1,24 @@
-import { addPlayer, addGameToPlayer } from "./players.actions";
+import { ADD_PLAYER, ADD_GAME_TO_PLAYER } from "./players.types";
 const INITIAL_STATE = {
     players: []
 }
 
 const reducer = (state=INITIAL_STATE, action) => {
+  let playersCopy = [...state.players] 
   switch(action.type){
-    case addPlayer:
+    case ADD_PLAYER:
+      playersCopy.push({name: action.payload, games: 0})
       return {
         ...state,
-        players: state.players.push({name: action.payload, games: 0})
+        players: playersCopy
       }
-    case addGameToPlayer:
+    case ADD_GAME_TO_PLAYER:
+      playersCopy.forEach(player => {
+        if(player.name === action.payload.name) {player.games=player.games++}
+      })
       return{
         ...state,
-        players: state.players.forEach(player => {
-          if(player.name === action.payload.name) {player.games=player.games++}
-        })
+        players: playersCopy
       }
     default: return state;
   }
