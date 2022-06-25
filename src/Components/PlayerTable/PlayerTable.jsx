@@ -1,5 +1,5 @@
 function PlayerTable() {
-  return <div></div>;
+  return <div>PlayerTable</div>;
 }
 
 export default PlayerTable;
