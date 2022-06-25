@@ -1,16 +1,12 @@
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
 import { addPlayer } from "../../redux/Players/players.actions";
 
 function NameInput(props) {
   const [inputValue, setInputValue] = useState("");
   const getInputValue = () => inputValue;
-
-  useEffect(() => {
-    console.log(props.players);
-  });
 
   return (
     <div>
