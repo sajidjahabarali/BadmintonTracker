@@ -13,7 +13,7 @@ const reducer = (state=INITIAL_STATE, action) => {
   let playersCopy = [...state.players] 
   switch(action.type){
     case ADD_PLAYER:
-      playersCopy.push({name: action.payload, games: playersCopy.length>0 ? playersCopy[playersCopy.length-1].games : 0})
+      playersCopy.push({name: action.payload, games: playersCopy.length>0 ? playersCopy[0].games : 0})
       return {
         ...state,
         players: playersCopy.sort((a,b) => sortByGames(a,b))
