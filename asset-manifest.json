@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/BadmintonBracket/static/css/main.d12248c2.css",
-    "main.js": "/BadmintonBracket/static/js/main.69a21472.js",
+    "main.css": "/BadmintonBracket/static/css/main.8d7cb004.css",
+    "main.js": "/BadmintonBracket/static/js/main.10f52f7d.js",
     "static/js/787.3f658dd7.chunk.js": "/BadmintonBracket/static/js/787.3f658dd7.chunk.js",
     "index.html": "/BadmintonBracket/index.html",
-    "main.d12248c2.css.map": "/BadmintonBracket/static/css/main.d12248c2.css.map",
-    "main.69a21472.js.map": "/BadmintonBracket/static/js/main.69a21472.js.map",
+    "main.8d7cb004.css.map": "/BadmintonBracket/static/css/main.8d7cb004.css.map",
+    "main.10f52f7d.js.map": "/BadmintonBracket/static/js/main.10f52f7d.js.map",
     "787.3f658dd7.chunk.js.map": "/BadmintonBracket/static/js/787.3f658dd7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d12248c2.css",
-    "static/js/main.69a21472.js"
+    "static/css/main.8d7cb004.css",
+    "static/js/main.10f52f7d.js"
   ]
 }
