@@ -1,33 +1,72 @@
-import { ADD_PLAYER, ADD_GAME_TO_PLAYER } from "./players.types";
+import {
+  ADD_PLAYER,
+  ADD_GAME_TO_PLAYER,
+  ADD_WIN_TO_PLAYER,
+  ADD_LOSS_TO_PLAYER,
+} from "./players.types";
 const INITIAL_STATE = {
-    players: []
-}
+  players: [],
+};
 
 const sortByGames = (a, b) => {
-  if (a.games > b.games) return 1
-  else if (a.games < b.games) return -1
-  else return 0
-}
+  if (a.matchMakingGamesPlayed > b.matchMakingGamesPlayed) return 1;
+  else if (a.matchMakingGamesPlayed < b.matchMakingGamesPlayed) return -1;
+  else return 0;
+};
 
-const reducer = (state=INITIAL_STATE, action) => {
-  let playersCopy = [...state.players] 
-  switch(action.type){
+const reducer = (state = INITIAL_STATE, action) => {
+  let playersCopy = [...state.players];
+  switch (action.type) {
     case ADD_PLAYER:
-      playersCopy.push({name: action.payload, games: playersCopy.length>0 ? playersCopy[0].games : 0})
+      playersCopy.push({
+        name: action.payload,
+        wins: 0,
+        losses: 0,
+        actualGamesPlayed: 0,
+        matchMakingGamesPlayed:
+          playersCopy.length > 0 ? playersCopy[0].matchMakingGamesPlayed : 0,
+      });
       return {
         ...state,
-        players: playersCopy.sort((a,b) => sortByGames(a,b))
-      }
+        players: playersCopy.sort((a, b) => sortByGames(a, b)),
+      };
     case ADD_GAME_TO_PLAYER:
-      playersCopy.forEach(player => {
-        if(player.name === action.payload) {player.games++}
-      })
-      return{
+      playersCopy.forEach((player) => {
+        if (player.name === action.payload) {
+          player.actualGamesPlayed++;
+          player.matchMakingGamesPlayed++;
+        }
+      });
+      return {
         ...state,
-        players: playersCopy.sort((a,b) => sortByGames(a,b))
-      }
-    default: return state;
+        players: playersCopy.sort((a, b) => sortByGames(a, b)),
+      };
+
+    case ADD_WIN_TO_PLAYER:
+      playersCopy.forEach((player) => {
+        if (player.name === action.payload) {
+          player.wins++;
+        }
+      });
+      return {
+        ...state,
+        players: playersCopy.sort((a, b) => sortByGames(a, b)),
+      };
+
+    case ADD_LOSS_TO_PLAYER:
+      playersCopy.forEach((player) => {
+        if (player.name === action.payload) {
+          player.losses++;
+        }
+      });
+      return {
+        ...state,
+        players: playersCopy.sort((a, b) => sortByGames(a, b)),
+      };
+
+    default:
+      return state;
   }
-}
+};
 
 export default reducer;

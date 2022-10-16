@@ -1,2 +1,4 @@
-export const ADD_PLAYER =  'ADD_PLAYER'
-export const ADD_GAME_TO_PLAYER = 'ADD_GAME_TO_PLAYER'
+export const ADD_PLAYER = "ADD_PLAYER";
+export const ADD_GAME_TO_PLAYER = "ADD_GAME_TO_PLAYER";
+export const ADD_WIN_TO_PLAYER = "ADD_WIN_TO_PLAYER";
+export const ADD_LOSS_TO_PLAYER = "ADD_LOSS_TO_PLAYER";

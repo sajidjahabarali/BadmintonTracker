@@ -1,24 +1,69 @@
 import { connect } from "react-redux";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import { addGameToPlayer } from "../../redux/Players/players.actions";
+import { useEffect } from "react";
+import {
+  addGameToPlayer,
+  addWinToPlayer,
+  addLossToPlayer,
+} from "../../redux/Players/players.actions";
+import "./CurrentMatch.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { orange, blue } from "@mui/material/colors";
+
+const theme = createTheme({
+  palette: {
+    orange: {
+      // Purple and green play nicely together.
+      main: orange[500],
+    },
+    blue: {
+      // This is green.A700 as hex.
+      main: blue[500],
+    },
+  },
+});
 
 function CurrentMatch(props) {
-  const [showMatch, setShowMatch] = useState(false);
   const [currentPlayers, setCurrentPlayers] = useState([]);
+  const [bracketStarted, setBracketStarted] = useState(false);
 
-  const createNextMatch = () => {
-    const currentPlayersShuffled = shuffleArray(
-      props.players.players.slice(0, 4)
-    );
-    setCurrentPlayers(currentPlayersShuffled);
-
-    currentPlayersShuffled.forEach((player) =>
-      props.addGameToPlayer(player.name)
-    );
-    if (!showMatch) {
-      setShowMatch(true);
+  useEffect(() => {
+    if (props.players.players.length >= 4) {
+      const currentPlayersShuffled = shuffleArray(
+        props.players.players.slice(0, 4)
+      );
+      setCurrentPlayers(currentPlayersShuffled);
     }
+  }, [props.players.players]);
+
+  const createNextMatch = (winningTeam) => {
+    console.log(props.players.players);
+    switch (winningTeam) {
+      case "BLUE":
+        props.addWinToPlayer(currentPlayers[0].name);
+        props.addWinToPlayer(currentPlayers[1].name);
+        props.addLossToPlayer(currentPlayers[2].name);
+        props.addLossToPlayer(currentPlayers[3].name);
+        currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
+        break;
+
+      case "ORANGE":
+        props.addWinToPlayer(currentPlayers[2].name);
+        props.addWinToPlayer(currentPlayers[3].name);
+        props.addLossToPlayer(currentPlayers[0].name);
+        props.addLossToPlayer(currentPlayers[1].name);
+        currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
+        break;
+
+      default:
+        break;
+    }
+    console.log(props.players.players);
+
+    // currentPlayersShuffled.forEach((player) =>
+    //   props.addGameToPlayer(player.name)
+    // );
   };
 
   const shuffleArray = (array) => {
@@ -44,11 +89,11 @@ function CurrentMatch(props) {
   const getMatch = () => {
     return (
       <div>
-        <div className="team1">
+        <div className="blueTeam">
           {currentPlayers[0].name} and {currentPlayers[1].name}
         </div>
         <div className="team-divider">vs</div>
-        <div className="team23">
+        <div className="orangeTeam">
           {currentPlayers[2].name} and {currentPlayers[3].name}
         </div>
       </div>
@@ -56,18 +101,40 @@ function CurrentMatch(props) {
   };
   return (
     <div>
-      {showMatch ? getMatch() : null}
-      {props.players.players.length >= 4 ? (
+      {bracketStarted ? getMatch() : null}
+      {!(props.players.players.length >= 4) ? (
+        <div>Add players &#40;minimum 4&#x29;</div>
+      ) : bracketStarted ? (
+        <ThemeProvider theme={theme}>
+          <Button
+            variant="contained"
+            color="blue"
+            onClick={() => {
+              createNextMatch("BLUE");
+            }}
+          >
+            Blue wins
+          </Button>
+          <Button
+            variant="contained"
+            color="orange"
+            onClick={() => {
+              createNextMatch("ORANGE");
+            }}
+          >
+            Orange wins
+          </Button>
+        </ThemeProvider>
+      ) : (
         <Button
           variant="contained"
           onClick={() => {
             createNextMatch();
+            setBracketStarted(true);
           }}
         >
-          Create next match
+          Create first match
         </Button>
-      ) : (
-        <div>Add players &#40;minimum 4&#x29;</div>
       )}
     </div>
   );
@@ -83,6 +150,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addGameToPlayer: (payload) => {
       dispatch(addGameToPlayer(payload));
+    },
+    addWinToPlayer: (payload) => {
+      dispatch(addWinToPlayer(payload));
+    },
+    addLossToPlayer: (payload) => {
+      dispatch(addLossToPlayer(payload));
     },
   };
 };
