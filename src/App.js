@@ -8,11 +8,6 @@ function App() {
       <div className="container">
         <NameInput></NameInput>
         <BracketInfo></BracketInfo>
-        <div className="matchInfo">
-          <div className="currentMatch"></div>
-          <div className="playerTable"></div>
-        </div>
-        <div className="nextMatchButton"></div>
       </div>
     </div>
   );
