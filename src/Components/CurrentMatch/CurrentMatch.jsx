@@ -14,11 +14,9 @@ import { orange, blue } from "@mui/material/colors";
 const theme = createTheme({
   palette: {
     orange: {
-      // Purple and green play nicely together.
       main: orange[500],
     },
     blue: {
-      // This is green.A700 as hex.
       main: blue[500],
     },
   },
@@ -27,6 +25,7 @@ const theme = createTheme({
 function CurrentMatch(props) {
   const [currentPlayers, setCurrentPlayers] = useState([]);
   const [bracketStarted, setBracketStarted] = useState(false);
+  const [matchesPlayed, setMatchesPlayed] = useState(1);
 
   useEffect(() => {
     if (props.players.players.length >= 4) {
@@ -38,14 +37,17 @@ function CurrentMatch(props) {
   }, [props.players.players]);
 
   const createNextMatch = (winningTeam) => {
-    console.log(props.players.players);
+    if (winningTeam) {
+      currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
+      setMatchesPlayed(matchesPlayed + 1);
+    }
+
     switch (winningTeam) {
       case "BLUE":
         props.addWinToPlayer(currentPlayers[0].name);
         props.addWinToPlayer(currentPlayers[1].name);
         props.addLossToPlayer(currentPlayers[2].name);
         props.addLossToPlayer(currentPlayers[3].name);
-        currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
         break;
 
       case "ORANGE":
@@ -53,17 +55,12 @@ function CurrentMatch(props) {
         props.addWinToPlayer(currentPlayers[3].name);
         props.addLossToPlayer(currentPlayers[0].name);
         props.addLossToPlayer(currentPlayers[1].name);
-        currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
+
         break;
 
       default:
         break;
     }
-    console.log(props.players.players);
-
-    // currentPlayersShuffled.forEach((player) =>
-    //   props.addGameToPlayer(player.name)
-    // );
   };
 
   const shuffleArray = (array) => {
@@ -88,7 +85,7 @@ function CurrentMatch(props) {
 
   const getMatch = () => {
     return (
-      <div>
+      <div className="matchInfo">
         <div className="blueTeam">
           {currentPlayers[0].name} and {currentPlayers[1].name}
         </div>
@@ -101,29 +98,38 @@ function CurrentMatch(props) {
   };
   return (
     <div>
-      {bracketStarted ? getMatch() : null}
+      {bracketStarted ? (
+        <div>
+          Match: {matchesPlayed}
+          {getMatch()}
+        </div>
+      ) : null}
       {!(props.players.players.length >= 4) ? (
         <div>Add players &#40;minimum 4&#x29;</div>
       ) : bracketStarted ? (
         <ThemeProvider theme={theme}>
-          <Button
-            variant="contained"
-            color="blue"
-            onClick={() => {
-              createNextMatch("BLUE");
-            }}
-          >
-            Blue wins
-          </Button>
-          <Button
-            variant="contained"
-            color="orange"
-            onClick={() => {
-              createNextMatch("ORANGE");
-            }}
-          >
-            Orange wins
-          </Button>
+          <div className="button">
+            <Button
+              variant="contained"
+              color="blue"
+              onClick={() => {
+                createNextMatch("BLUE");
+              }}
+            >
+              Blue wins
+            </Button>
+          </div>
+          <div className="button">
+            <Button
+              variant="contained"
+              color="orange"
+              onClick={() => {
+                createNextMatch("ORANGE");
+              }}
+            >
+              Orange wins
+            </Button>
+          </div>
         </ThemeProvider>
       ) : (
         <Button

@@ -6,11 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import "./PlayerTable.css";
 
 function PlayerTable(props) {
   return (
-    <div>
-      {/* {console.log(props.players.players)} */}
+    <div className="container">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 150 }} aria-label="simple table">
           <TableHead>
