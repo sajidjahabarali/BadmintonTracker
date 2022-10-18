@@ -8,6 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./PlayerTable.css";
 
+const getWinRate = (wins, actualGamesPlayed) =>
+  ((parseFloat(wins) / parseFloat(actualGamesPlayed)) * 100).toFixed(1);
+
 function PlayerTable(props) {
   return (
     <div className="container">
@@ -19,6 +22,7 @@ function PlayerTable(props) {
               <TableCell align="right">Wins</TableCell>
               <TableCell align="right">Losses</TableCell>
               <TableCell align="right">Games Played</TableCell>
+              <TableCell align="right">Win Rate (%)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -33,6 +37,9 @@ function PlayerTable(props) {
                 <TableCell align="right">{player.wins}</TableCell>
                 <TableCell align="right">{player.losses}</TableCell>
                 <TableCell align="right">{player.actualGamesPlayed}</TableCell>
+                <TableCell align="right">
+                  {getWinRate(player.wins, player.actualGamesPlayed)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
