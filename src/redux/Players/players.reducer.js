@@ -4,6 +4,7 @@ import {
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
 } from "./players.types";
+import { shuffleArray } from "../../common.utils";
 const INITIAL_STATE = {
   players: [],
 };
@@ -12,6 +13,19 @@ const sortByGames = (a, b) => {
   if (a.matchMakingGamesPlayed > b.matchMakingGamesPlayed) return 1;
   else if (a.matchMakingGamesPlayed < b.matchMakingGamesPlayed) return -1;
   else return 0;
+};
+
+const equalGamesForAllPlayers = (players) => {
+  const comparisonPlayer = players[0];
+  for (let player in players) {
+    if (
+      players[player].matchMakingGamesPlayed !==
+      comparisonPlayer.matchMakingGamesPlayed
+    ) {
+      return false;
+    }
+  }
+  return true;
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -37,9 +51,14 @@ const reducer = (state = INITIAL_STATE, action) => {
           player.matchMakingGamesPlayed++;
         }
       });
+
+      const newPlayersState = equalGamesForAllPlayers(playersCopy)
+        ? shuffleArray(playersCopy)
+        : playersCopy.sort((a, b) => sortByGames(a, b));
+
       return {
         ...state,
-        players: playersCopy.sort((a, b) => sortByGames(a, b)),
+        players: newPlayersState,
       };
 
     case ADD_WIN_TO_PLAYER:
