@@ -85,9 +85,7 @@ function CurrentMatch(props) {
           {getMatch()}
         </div>
       ) : null}
-      {!(props.players.players.length >= 4) ? (
-        <div>Add players &#40;minimum 4&#x29;</div>
-      ) : bracketStarted ? (
+      {!(props.players.players.length >= 4) ? null : bracketStarted ? (
         <ThemeProvider theme={theme}>
           <div className="button">
             <Button

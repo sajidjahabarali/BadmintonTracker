@@ -19,7 +19,7 @@ function PlayerTable(props) {
     props.togglePlayerFrozen(player.name);
   };
 
-  return (
+  return props.players.players.length > 0 ? (
     <div className="container">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 150 }} aria-label="simple table">
@@ -65,7 +65,7 @@ function PlayerTable(props) {
         </Table>
       </TableContainer>
     </div>
-  );
+  ) : null;
 }
 
 const mapStateToProps = (state) => {

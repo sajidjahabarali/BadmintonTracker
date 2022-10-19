@@ -3,16 +3,38 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { addPlayer } from "../../redux/Players/players.actions";
+import { useEffect } from "react";
 
 function NameInput(props) {
   const [inputValue, setInputValue] = useState("");
-  const getInputValue = () => inputValue;
+  const [validName, setValidName] = useState(false);
+
+  const updateValidity = () => {
+    if (inputValue && !nameAlreadyExists(inputValue)) {
+      setValidName(true);
+    } else {
+      setValidName(false);
+    }
+  };
+
+  useEffect(() => {
+    updateValidity();
+  });
+
+  const nameAlreadyExists = (name) => {
+    for (let player in props.players.players) {
+      if (props.players.players[player].name === name) return true;
+    }
+
+    return false;
+  };
 
   return (
     <div>
       <Input
         id="outlined-basic"
         label="Enter player name"
+        placeholder="Add players (minimum 4)"
         variant="outlined"
         value={inputValue}
         onChange={(e) => {
@@ -21,8 +43,9 @@ function NameInput(props) {
       />
       <Button
         variant="text"
+        disabled={!validName}
         onClick={() => {
-          props.addPlayer(getInputValue());
+          props.addPlayer(inputValue);
           setInputValue("");
         }}
       >
