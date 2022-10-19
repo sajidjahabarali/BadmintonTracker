@@ -3,11 +3,19 @@ import {
   ADD_GAME_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
+  TOGGLE_PLAYER_FROZEN,
 } from "./players.types";
 
 export const addPlayer = (payload) => {
   return {
     type: ADD_PLAYER,
+    payload: payload,
+  };
+};
+
+export const togglePlayerFrozen = (payload) => {
+  return {
+    type: TOGGLE_PLAYER_FROZEN,
     payload: payload,
   };
 };

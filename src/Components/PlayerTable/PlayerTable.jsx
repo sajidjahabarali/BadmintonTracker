@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { togglePlayerFrozen } from "../../redux/Players/players.actions";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,9 +10,15 @@ import Paper from "@mui/material/Paper";
 import "./PlayerTable.css";
 
 const getWinRate = (wins, actualGamesPlayed) =>
-  ((parseFloat(wins) / parseFloat(actualGamesPlayed)) * 100).toFixed(1);
+  actualGamesPlayed > 0
+    ? ((parseFloat(wins) / parseFloat(actualGamesPlayed)) * 100).toFixed(1)
+    : "-";
 
 function PlayerTable(props) {
+  const handleFreezePlayerToggle = (player) => {
+    props.togglePlayerFrozen(player.name);
+  };
+
   return (
     <div className="container">
       <TableContainer component={Paper}>
@@ -19,10 +26,13 @@ function PlayerTable(props) {
           <TableHead>
             <TableRow>
               <TableCell>Player</TableCell>
-              <TableCell align="right">Wins</TableCell>
-              <TableCell align="right">Losses</TableCell>
-              <TableCell align="right">Games Played</TableCell>
-              <TableCell align="right">Win Rate (%)</TableCell>
+              <TableCell align="right">W</TableCell>
+              <TableCell align="right">L</TableCell>
+              <TableCell align="right">G</TableCell>
+              <TableCell align="right">WR (%)</TableCell>
+              <TableCell align="center">
+                <i className="fa-solid fa-gear"></i>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -40,6 +50,12 @@ function PlayerTable(props) {
                 <TableCell align="right">
                   {getWinRate(player.wins, player.actualGamesPlayed)}
                 </TableCell>
+                <TableCell align="center">
+                  <i
+                    onClick={() => handleFreezePlayerToggle(player)}
+                    className="fa-regular fa-snowflake icon"
+                  ></i>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -55,4 +71,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(PlayerTable);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    togglePlayerFrozen: (payload) => {
+      dispatch(togglePlayerFrozen(payload));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerTable);
