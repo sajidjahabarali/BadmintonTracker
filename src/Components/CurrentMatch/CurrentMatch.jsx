@@ -89,6 +89,7 @@ function CurrentMatch(props) {
         <ThemeProvider theme={theme}>
           <div className="button">
             <Button
+              className="teamButton"
               variant="contained"
               color="blue"
               onClick={() => {
@@ -100,6 +101,7 @@ function CurrentMatch(props) {
           </div>
           <div className="button">
             <Button
+              className="teamButton"
               variant="contained"
               color="orange"
               onClick={() => {
