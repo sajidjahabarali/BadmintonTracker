@@ -53,7 +53,10 @@ function PlayerTable(props) {
                 <TableCell align="center">
                   <i
                     onClick={() => handleFreezePlayerToggle(player)}
-                    className="fa-regular fa-snowflake icon"
+                    className={
+                      (player.frozen ? "frozen " : "") +
+                      "fa-regular fa-snowflake icon"
+                    }
                   ></i>
                 </TableCell>
               </TableRow>
