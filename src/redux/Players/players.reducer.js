@@ -1,4 +1,5 @@
 import {
+  RESET_DATA,
   ADD_PLAYER,
   ADD_GAME_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
@@ -7,12 +8,8 @@ import {
 } from "./players.types";
 import { shuffleArray } from "../../common.utils";
 
-const localStoragePlayers = localStorage.getItem("players")
-  ? JSON.parse(localStorage.getItem("players"))
-  : [];
-
 const INITIAL_STATE = {
-  players: localStoragePlayers,
+  players: [],
 };
 
 const sortByGames = (a, b) => {
@@ -53,6 +50,10 @@ const reducer = (state = INITIAL_STATE, action) => {
   let playersCopy = [...state.players];
   let newPlayersState = [];
   switch (action.type) {
+    case RESET_DATA:
+      localStorage.clear();
+      return { players: [] };
+
     case ADD_PLAYER:
       playersCopy.push({
         name: action.payload,
@@ -116,7 +117,6 @@ const reducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 
-  localStorage.setItem("players", JSON.stringify(state.players));
   return {
     ...state,
     players: newPlayersState,

@@ -1,3 +1,4 @@
+export const RESET_DATA = "RESET_DATA";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const TOGGLE_PLAYER_FROZEN = "TOGGLE_PLAYER_FROZEN";
 export const ADD_GAME_TO_PLAYER = "ADD_GAME_TO_PLAYER";
