@@ -6,8 +6,13 @@ import {
   TOGGLE_PLAYER_FROZEN,
 } from "./players.types";
 import { shuffleArray } from "../../common.utils";
+
+const localStoragePlayers = localStorage.getItem("players")
+  ? JSON.parse(localStorage.getItem("players"))
+  : [];
+
 const INITIAL_STATE = {
-  players: [],
+  players: localStoragePlayers,
 };
 
 const sortByGames = (a, b) => {
@@ -46,6 +51,7 @@ const equalGamesForAllPlayers = (players) => {
 
 const reducer = (state = INITIAL_STATE, action) => {
   let playersCopy = [...state.players];
+  let newPlayersState = [];
   switch (action.type) {
     case ADD_PLAYER:
       playersCopy.push({
@@ -56,11 +62,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         matchMakingGamesPlayed:
           playersCopy.length > 0 ? playersCopy[0].matchMakingGamesPlayed : 0,
         frozen: false,
+        relativeStats: [],
       });
-      return {
-        ...state,
-        players: sortPlayers(playersCopy),
-      };
+
+      newPlayersState = sortPlayers(playersCopy);
+      break;
 
     case TOGGLE_PLAYER_FROZEN:
       playersCopy.forEach((player) => {
@@ -70,10 +76,8 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
       });
 
-      return {
-        ...state,
-        players: sortPlayers(playersCopy),
-      };
+      newPlayersState = sortPlayers(playersCopy);
+      break;
 
     case ADD_GAME_TO_PLAYER:
       playersCopy.forEach((player) => {
@@ -83,14 +87,10 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
       });
 
-      const newPlayersState = equalGamesForAllPlayers(playersCopy)
+      newPlayersState = equalGamesForAllPlayers(playersCopy)
         ? shuffleArray(playersCopy).sort((a, b) => sortByFrozen(a, b))
         : sortPlayers(playersCopy);
-
-      return {
-        ...state,
-        players: newPlayersState,
-      };
+      break;
 
     case ADD_WIN_TO_PLAYER:
       playersCopy.forEach((player) => {
@@ -98,10 +98,9 @@ const reducer = (state = INITIAL_STATE, action) => {
           player.wins++;
         }
       });
-      return {
-        ...state,
-        players: sortPlayers(playersCopy),
-      };
+
+      newPlayersState = sortPlayers(playersCopy);
+      break;
 
     case ADD_LOSS_TO_PLAYER:
       playersCopy.forEach((player) => {
@@ -109,14 +108,19 @@ const reducer = (state = INITIAL_STATE, action) => {
           player.losses++;
         }
       });
-      return {
-        ...state,
-        players: sortPlayers(playersCopy),
-      };
+
+      newPlayersState = sortPlayers(playersCopy);
+      break;
 
     default:
       return state;
   }
+
+  localStorage.setItem("players", JSON.stringify(state.players));
+  return {
+    ...state,
+    players: newPlayersState,
+  };
 };
 
 export default reducer;
