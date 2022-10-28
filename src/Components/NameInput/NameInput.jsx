@@ -8,12 +8,37 @@ import { useEffect } from "react";
 function NameInput(props) {
   const [inputValue, setInputValue] = useState("");
   const [validName, setValidName] = useState(false);
+  const [showNameAlreadyExistsError, setShowNameAlreadyExistsError] =
+    useState(false);
+  const [
+    showNameCannotContainSpacesError,
+    setShowNameCannotContainSpacesError,
+  ] = useState(false);
 
   const updateValidity = () => {
-    if (inputValue && !nameAlreadyExists(inputValue)) {
-      setValidName(true);
+    if (inputValue) {
+      if (
+        !(
+          inputValue.includes(" ") ||
+          nameAlreadyExists(inputValue.toUpperCase())
+        )
+      ) {
+        setValidName(true);
+        setShowNameCannotContainSpacesError(false);
+        setShowNameAlreadyExistsError(false);
+      }
+      if (inputValue.includes(" ")) {
+        setValidName(false);
+        setShowNameCannotContainSpacesError(true);
+      }
+      if (nameAlreadyExists(inputValue.toUpperCase())) {
+        setValidName(false);
+        setShowNameAlreadyExistsError(true);
+      }
     } else {
-      setValidName(false);
+      setValidName(true);
+      setShowNameCannotContainSpacesError(false);
+      setShowNameAlreadyExistsError(false);
     }
   };
 
@@ -31,26 +56,35 @@ function NameInput(props) {
 
   return (
     <div>
-      <Input
-        id="outlined-basic"
-        label="Enter player name"
-        placeholder="Add players (minimum 4)"
-        variant="outlined"
-        value={inputValue}
-        onChange={(e) => {
-          setInputValue(e.target.value);
-        }}
-      />
-      <Button
-        variant="text"
-        disabled={!validName}
-        onClick={() => {
-          props.addPlayer(inputValue);
-          setInputValue("");
-        }}
-      >
-        Add name
-      </Button>
+      <div className="userInput">
+        <Input
+          id="outlined-basic"
+          label="Enter player name"
+          placeholder="Add players (minimum 4)"
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+        />
+        <Button
+          variant="text"
+          disabled={!validName}
+          onClick={() => {
+            props.addPlayer(inputValue.toUpperCase());
+            setInputValue("");
+          }}
+        >
+          Add name
+        </Button>
+      </div>
+      {!validName && (
+        <div className="errorMessage">
+          <i className="fa-solid fa-circle-exclamation"></i>
+          {showNameAlreadyExistsError && " Name already exists."}
+          {showNameCannotContainSpacesError && " Name cannot contain spaces."}
+        </div>
+      )}
     </div>
   );
 }
