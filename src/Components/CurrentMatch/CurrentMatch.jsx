@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useEffect } from "react";
 import {
-  addGameToPlayer,
+  addMatchToPlayer,
   addWinToPlayer,
   addLossToPlayer,
 } from "../../redux/Players/players.actions";
@@ -25,7 +25,7 @@ const theme = createTheme({
 
 function CurrentMatch(props) {
   const [currentPlayers, setCurrentPlayers] = useState([]);
-  const [bracketStarted, setBracketStarted] = useState(false);
+  const [matchesStarted, setMatchesStarted] = useState(false);
   const [matchesPlayed, setMatchesPlayed] = useState(1);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function CurrentMatch(props) {
 
   const createNextMatch = (winningTeam) => {
     if (winningTeam) {
-      currentPlayers.forEach((player) => props.addGameToPlayer(player.name));
+      currentPlayers.forEach((player) => props.addMatchToPlayer(player.name));
       setMatchesPlayed(matchesPlayed + 1);
     }
 
@@ -77,15 +77,16 @@ function CurrentMatch(props) {
       </div>
     );
   };
+
   return (
     <div>
-      {bracketStarted ? (
+      {matchesStarted ? (
         <div>
           Match: {matchesPlayed}
           {getMatch()}
         </div>
       ) : null}
-      {!(props.players.players.length >= 4) ? null : bracketStarted ? (
+      {!(props.players.players.length >= 4) ? null : matchesStarted ? (
         <ThemeProvider theme={theme}>
           <div className="button">
             <Button
@@ -117,7 +118,7 @@ function CurrentMatch(props) {
           variant="contained"
           onClick={() => {
             createNextMatch();
-            setBracketStarted(true);
+            setMatchesStarted(true);
           }}
         >
           Create first match
@@ -135,8 +136,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addGameToPlayer: (payload) => {
-      dispatch(addGameToPlayer(payload));
+    addMatchToPlayer: (payload) => {
+      dispatch(addMatchToPlayer(payload));
     },
     addWinToPlayer: (payload) => {
       dispatch(addWinToPlayer(payload));
