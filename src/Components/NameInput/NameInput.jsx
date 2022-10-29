@@ -4,6 +4,7 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { addPlayer } from "../../redux/Players/players.actions";
 import { useEffect } from "react";
+import "./NameInput.css";
 
 function NameInput(props) {
   const [inputValue, setInputValue] = useState("");
@@ -17,34 +18,30 @@ function NameInput(props) {
 
   const updateValidity = () => {
     if (inputValue) {
-      if (
-        !(
-          inputValue.includes(" ") ||
-          nameAlreadyExists(inputValue.toUpperCase())
-        )
-      ) {
+      if (nameIsValid(inputValue)) {
         setValidName(true);
         setShowNameCannotContainSpacesError(false);
-        setShowNameAlreadyExistsError(false);
-      }
-      if (inputValue.includes(" ")) {
+        setShowNameAlreadyExistsError(nameAlreadyExists(false));
+      } else {
         setValidName(false);
-        setShowNameCannotContainSpacesError(true);
-      }
-      if (nameAlreadyExists(inputValue.toUpperCase())) {
-        setValidName(false);
-        setShowNameAlreadyExistsError(true);
+        setShowNameAlreadyExistsError(
+          nameAlreadyExists(inputValue.trim().toUpperCase())
+        );
+        setShowNameCannotContainSpacesError(inputValue.includes(" "));
       }
     } else {
-      setValidName(true);
-      setShowNameCannotContainSpacesError(false);
+      setValidName(false);
       setShowNameAlreadyExistsError(false);
+      setShowNameCannotContainSpacesError(false);
     }
   };
 
   useEffect(() => {
     updateValidity();
   });
+
+  const nameIsValid = (name) =>
+    !(name.includes(" ") || nameAlreadyExists(name.toUpperCase()));
 
   const nameAlreadyExists = (name) => {
     for (let player in props.players.players) {
@@ -78,7 +75,7 @@ function NameInput(props) {
           Add name
         </Button>
       </div>
-      {!validName && (
+      {(showNameAlreadyExistsError || showNameCannotContainSpacesError) && (
         <div className="errorMessage">
           <i className="fa-solid fa-circle-exclamation"></i>
           {showNameAlreadyExistsError && " Name already exists."}
