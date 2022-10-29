@@ -7,6 +7,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Modal from "../Modal/Modal";
+import { useState } from "react";
+
 import "./PlayerTable.css";
 
 const getWinRate = (wins, actualGamesPlayed) =>
@@ -15,11 +18,17 @@ const getWinRate = (wins, actualGamesPlayed) =>
     : "-";
 
 function PlayerTable(props) {
+  const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
+
   const handleFreezePlayerToggle = (player) => {
     props.togglePlayerFrozen(player.name);
   };
 
-  return props.players.players.length > 0 ? (
+  const handleRelativeStatsButton = (player) => {
+    setRelativeStatsPlayer(player);
+  };
+
+  const getTable = () => (
     <div className="container">
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 150 }} aria-label="simple table">
@@ -28,7 +37,7 @@ function PlayerTable(props) {
               <TableCell>Player</TableCell>
               <TableCell align="right">W</TableCell>
               <TableCell align="right">L</TableCell>
-              <TableCell align="right">G</TableCell>
+              <TableCell align="right">T</TableCell>
               <TableCell align="right">WR (%)</TableCell>
               <TableCell align="center">
                 <i className="fa-solid fa-gear"></i>
@@ -58,12 +67,28 @@ function PlayerTable(props) {
                       "fa-regular fa-snowflake icon"
                     }
                   ></i>
+                  <i
+                    onClick={() => handleRelativeStatsButton(player)}
+                    className="fa-solid fa-chart-simple icon"
+                  ></i>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+    </div>
+  );
+
+  return props.players.players.length > 0 ? (
+    <div>
+      <Modal
+        handleOpen={() => {
+          return relativeStatsPlayer !== null;
+        }}
+        player={props.players.players[0]}
+      ></Modal>
+      {getTable()}
     </div>
   ) : null;
 }
