@@ -55,9 +55,11 @@ function PlayerTable(props) {
                 </TableCell>
                 <TableCell align="right">{player.wins}</TableCell>
                 <TableCell align="right">{player.losses}</TableCell>
-                <TableCell align="right">{player.actualGamesPlayed}</TableCell>
                 <TableCell align="right">
-                  {getWinRate(player.wins, player.actualGamesPlayed)}
+                  {player.actualMatchesPlayed}
+                </TableCell>
+                <TableCell align="right">
+                  {getWinRate(player.wins, player.actualMatchesPlayed)}
                 </TableCell>
                 <TableCell align="center">
                   <i
