@@ -72,7 +72,7 @@ function NameInput(props) {
             setInputValue("");
           }}
         >
-          Add name
+          <i className="fa-solid fa-user-plus"></i>
         </Button>
       </div>
       {(showNameAlreadyExistsError || showNameCannotContainSpacesError) && (
