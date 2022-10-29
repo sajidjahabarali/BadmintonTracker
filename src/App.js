@@ -2,12 +2,13 @@ import "./App.css";
 import { connect } from "react-redux";
 import NameInput from "./Components/NameInput/NameInput";
 import BracketInfo from "./Components/BracketInfo/BracketInfo";
-import { resetData } from "./redux/Players/players.actions";
+import { resetPlayerData } from "./redux/Players/players.actions";
 
 function App(props) {
   const handleResetButton = () => {
-    console.log("test");
-    props.resetData();
+    localStorage.clear();
+    props.resetPlayerData();
+    props.resetMatchesData();
   };
 
   return (
@@ -27,12 +28,10 @@ function App(props) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    resetData: (payload) => {
-      dispatch(resetData(payload));
+    resetPlayerData: (payload) => {
+      dispatch(resetPlayerData(payload));
     },
   };
 };
 
 export default connect(null, mapDispatchToProps)(App);
-
-// export default App;
