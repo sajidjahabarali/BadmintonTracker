@@ -17,3 +17,23 @@ export const shuffleArray = (array) => {
 
   return array;
 };
+
+export function saveToLocalStorage(state, name) {
+  try {
+    const serialisedState = JSON.stringify(state);
+    localStorage.setItem(name, serialisedState);
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+export function loadFromLocalStorage(name) {
+  try {
+    const serialisedState = localStorage.getItem(name);
+    if (serialisedState === null) return undefined;
+    return JSON.parse(serialisedState);
+  } catch (e) {
+    console.warn(e);
+    return undefined;
+  }
+}
