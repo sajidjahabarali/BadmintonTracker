@@ -1,7 +1,7 @@
 import {
-  RESET_DATA,
+  RESET_PLAYER_DATA,
   ADD_PLAYER,
-  ADD_GAME_TO_PLAYER,
+  ADD_MATCH_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
@@ -12,9 +12,9 @@ const INITIAL_STATE = {
   players: [],
 };
 
-const sortByGames = (a, b) => {
-  if (a.matchMakingGamesPlayed > b.matchMakingGamesPlayed) return 1;
-  else if (a.matchMakingGamesPlayed < b.matchMakingGamesPlayed) return -1;
+const sortByMatches = (a, b) => {
+  if (a.matchMakingMatchesPlayed > b.matchMakingMatchesPlayed) return 1;
+  else if (a.matchMakingMatchesPlayed < b.matchMakingMatchesPlayed) return -1;
   else return 0;
 };
 
@@ -25,20 +25,20 @@ const sortByFrozen = (a, b) => {
 };
 
 const sortPlayers = (players) => {
-  const playersSortedByGames = players.sort((a, b) => sortByGames(a, b));
-  const playersSortedByGamesAndFrozen = playersSortedByGames.sort((a, b) =>
+  const playersSortedByMatches = players.sort((a, b) => sortByMatches(a, b));
+  const playersSortedByMatchesAndFrozen = playersSortedByMatches.sort((a, b) =>
     sortByFrozen(a, b)
   );
 
-  return playersSortedByGamesAndFrozen;
+  return playersSortedByMatchesAndFrozen;
 };
 
-const equalGamesForAllPlayers = (players) => {
+const equalMatchesForAllPlayers = (players) => {
   const comparisonPlayer = players[0];
   for (let player in players) {
     if (
-      players[player].matchMakingGamesPlayed !==
-      comparisonPlayer.matchMakingGamesPlayed
+      players[player].matchMakingMatchesPlayed !==
+      comparisonPlayer.matchMakingMatchesPlayed
     ) {
       return false;
     }
@@ -50,8 +50,7 @@ const reducer = (state = INITIAL_STATE, action) => {
   let playersCopy = [...state.players];
   let newPlayersState = [];
   switch (action.type) {
-    case RESET_DATA:
-      localStorage.clear();
+    case RESET_PLAYER_DATA:
       return { players: [] };
 
     case ADD_PLAYER:
@@ -59,9 +58,9 @@ const reducer = (state = INITIAL_STATE, action) => {
         name: action.payload,
         wins: 0,
         losses: 0,
-        actualGamesPlayed: 0,
-        matchMakingGamesPlayed:
-          playersCopy.length > 0 ? playersCopy[0].matchMakingGamesPlayed : 0,
+        actualMatchesPlayed: 0,
+        matchMakingMatchesPlayed:
+          playersCopy.length > 0 ? playersCopy[0].matchMakingMatchesPlayed : 0,
         frozen: false,
         relativeStats: [],
       });
@@ -73,22 +72,23 @@ const reducer = (state = INITIAL_STATE, action) => {
       playersCopy.forEach((player) => {
         if (player.name === action.payload) {
           player.frozen = !player.frozen;
-          player.matchMakingGamesPlayed = playersCopy[0].matchMakingGamesPlayed;
+          player.matchMakingMatchesPlayed =
+            playersCopy[0].matchMakingMatchesPlayed;
         }
       });
 
       newPlayersState = sortPlayers(playersCopy);
       break;
 
-    case ADD_GAME_TO_PLAYER:
+    case ADD_MATCH_TO_PLAYER:
       playersCopy.forEach((player) => {
         if (player.name === action.payload) {
-          player.actualGamesPlayed++;
-          player.matchMakingGamesPlayed++;
+          player.actualMatchesPlayed++;
+          player.matchMakingMatchesPlayed++;
         }
       });
 
-      newPlayersState = equalGamesForAllPlayers(playersCopy)
+      newPlayersState = equalMatchesForAllPlayers(playersCopy)
         ? shuffleArray(playersCopy).sort((a, b) => sortByFrozen(a, b))
         : sortPlayers(playersCopy);
       break;

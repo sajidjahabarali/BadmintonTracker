@@ -1,16 +1,15 @@
 import {
-  RESET_DATA,
+  RESET_PLAYER_DATA,
   ADD_PLAYER,
-  ADD_GAME_TO_PLAYER,
+  ADD_MATCH_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
 } from "./players.types";
 
-export const resetData = (payload) => {
+export const resetPlayerData = () => {
   return {
-    type: RESET_DATA,
-    payload: payload,
+    type: RESET_PLAYER_DATA,
   };
 };
 
@@ -28,9 +27,9 @@ export const togglePlayerFrozen = (payload) => {
   };
 };
 
-export const addGameToPlayer = (payload) => {
+export const addMatchToPlayer = (payload) => {
   return {
-    type: ADD_GAME_TO_PLAYER,
+    type: ADD_MATCH_TO_PLAYER,
     payload: payload,
   };
 };
