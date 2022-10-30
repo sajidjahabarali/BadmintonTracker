@@ -3,13 +3,21 @@ import { connect } from "react-redux";
 import NameInput from "./Components/NameInput/NameInput";
 import TrackerInfo from "./Components/TrackerInfo/TrackerInfo";
 import { resetPlayerData } from "./redux/Players/players.actions";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function App(props) {
+  const [resetButtonPressed, setResetButtonPressed] = useState(false);
+
   const handleResetButton = () => {
+    setResetButtonPressed(true);
     localStorage.clear();
     props.resetPlayerData();
-    props.resetMatchesData();
   };
+
+  useEffect(() => {
+    setResetButtonPressed(false);
+  }, [resetButtonPressed]);
 
   return (
     <div className="App">
@@ -20,7 +28,7 @@ function App(props) {
       <header className="App-header">Badminton Tracker</header>
       <div className="container">
         <NameInput></NameInput>
-        <TrackerInfo></TrackerInfo>
+        <TrackerInfo resetButtonPressed={resetButtonPressed}></TrackerInfo>
       </div>
     </div>
   );

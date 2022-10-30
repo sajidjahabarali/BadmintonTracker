@@ -11,6 +11,9 @@ import { shuffleArray } from "../../common.utils";
 import "./CurrentMatch.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { orange, blue } from "@mui/material/colors";
+import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
+
+const localStorageKey = "currentMatchState";
 
 const theme = createTheme({
   palette: {
@@ -24,9 +27,41 @@ const theme = createTheme({
 });
 
 function CurrentMatch(props) {
-  const [currentPlayers, setCurrentPlayers] = useState([]);
-  const [matchesStarted, setMatchesStarted] = useState(false);
-  const [matchesPlayed, setMatchesPlayed] = useState(1);
+  const getCurrentPlayersDefaultState = () => {
+    return loadFromLocalStorage(localStorageKey)
+      ? loadFromLocalStorage(localStorageKey).currentPlayers
+      : [];
+  };
+
+  const getMatchesStartedDefaultState = () => {
+    return loadFromLocalStorage(localStorageKey)
+      ? loadFromLocalStorage(localStorageKey).matchesStarted
+      : false;
+  };
+
+  const getMatchesPlayedDefaultState = () => {
+    return loadFromLocalStorage(localStorageKey)
+      ? loadFromLocalStorage(localStorageKey).matchesPlayed
+      : 0;
+  };
+
+  const [currentPlayers, setCurrentPlayers] = useState(
+    getCurrentPlayersDefaultState()
+  );
+  const [matchesStarted, setMatchesStarted] = useState(
+    getMatchesStartedDefaultState()
+  );
+  const [matchesPlayed, setMatchesPlayed] = useState(
+    getMatchesPlayedDefaultState()
+  );
+
+  useEffect(() => {
+    if (props.resetButtonPressed) {
+      setCurrentPlayers([]);
+      setMatchesPlayed(0);
+      setMatchesStarted(false);
+    }
+  }, [props.resetButtonPressed]);
 
   useEffect(() => {
     if (props.players.players.length >= 4) {
@@ -36,6 +71,13 @@ function CurrentMatch(props) {
       setCurrentPlayers(currentPlayersShuffled);
     }
   }, [props.players.players]);
+
+  useEffect(() => {
+    saveToLocalStorage(
+      { currentPlayers, matchesStarted, matchesPlayed },
+      localStorageKey
+    );
+  }, [currentPlayers, matchesPlayed, matchesStarted]);
 
   const createNextMatch = (winningTeam) => {
     if (winningTeam) {
@@ -82,7 +124,7 @@ function CurrentMatch(props) {
     <div>
       {matchesStarted ? (
         <div>
-          Match: {matchesPlayed}
+          Matches played: {matchesPlayed}
           {getMatch()}
         </div>
       ) : null}

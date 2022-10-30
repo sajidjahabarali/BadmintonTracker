@@ -2,12 +2,10 @@ import { createStore } from "redux";
 import rootReducer from "./rootReducer";
 import { loadFromLocalStorage, saveToLocalStorage } from "../common.utils";
 
-const store = createStore(
-  rootReducer,
-  loadFromLocalStorage("persistantGlobalState")
-);
+const localStorageKey = "globalState";
+const store = createStore(rootReducer, loadFromLocalStorage(localStorageKey));
 store.subscribe(() => {
-  saveToLocalStorage(store.getState(), "persistantGlobalState");
+  saveToLocalStorage(store.getState(), localStorageKey);
 });
 
 export default store;

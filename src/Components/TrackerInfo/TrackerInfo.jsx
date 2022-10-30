@@ -1,9 +1,11 @@
 import CurrentMatch from "../CurrentMatch/CurrentMatch";
 import PlayerTable from "../PlayerTable/PlayerTable";
-function BracketInfo() {
+function BracketInfo(props) {
   return (
     <div>
-      <CurrentMatch></CurrentMatch>
+      <CurrentMatch
+        resetButtonPressed={props.resetButtonPressed}
+      ></CurrentMatch>
       <PlayerTable></PlayerTable>
     </div>
   );
