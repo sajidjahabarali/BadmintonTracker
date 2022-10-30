@@ -36,19 +36,19 @@ function PlayerTable(props) {
           <Table sx={{ minWidth: 150 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">
+                <TableCell align="left">
                   <i class="fa-solid fa-user"></i>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="right">
                   <i class="fa-solid fa-w"></i>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="right">
                   <i class="fa-solid fa-l"></i>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="right">
                   <i class="fa-solid fa-hashtag"></i>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="right">
                   <i class="fa-solid fa-percent"></i>
                 </TableCell>
                 <TableCell align="center">
@@ -59,7 +59,7 @@ function PlayerTable(props) {
             <TableBody>
               {props.players.players.map((player, key) => (
                 <TableRow key={key}>
-                  <TableCell>{player.name}</TableCell>
+                  <TableCell align="left">{player.name}</TableCell>
                   <TableCell align="right">{player.wins}</TableCell>
                   <TableCell align="right">{player.losses}</TableCell>
                   <TableCell align="right">
