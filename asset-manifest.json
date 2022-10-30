@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/BadmintonBracket/static/css/main.fab6bcb9.css",
-    "main.js": "/BadmintonBracket/static/js/main.9398c522.js",
-    "static/js/787.3f658dd7.chunk.js": "/BadmintonBracket/static/js/787.3f658dd7.chunk.js",
-    "index.html": "/BadmintonBracket/index.html",
-    "main.fab6bcb9.css.map": "/BadmintonBracket/static/css/main.fab6bcb9.css.map",
-    "main.9398c522.js.map": "/BadmintonBracket/static/js/main.9398c522.js.map",
-    "787.3f658dd7.chunk.js.map": "/BadmintonBracket/static/js/787.3f658dd7.chunk.js.map"
+    "main.css": "/BadmintonTracker/static/css/main.fab6bcb9.css",
+    "main.js": "/BadmintonTracker/static/js/main.caf094d8.js",
+    "static/js/787.68a3d154.chunk.js": "/BadmintonTracker/static/js/787.68a3d154.chunk.js",
+    "index.html": "/BadmintonTracker/index.html",
+    "main.fab6bcb9.css.map": "/BadmintonTracker/static/css/main.fab6bcb9.css.map",
+    "main.caf094d8.js.map": "/BadmintonTracker/static/js/main.caf094d8.js.map",
+    "787.68a3d154.chunk.js.map": "/BadmintonTracker/static/js/787.68a3d154.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fab6bcb9.css",
-    "static/js/main.9398c522.js"
+    "static/js/main.caf094d8.js"
   ]
 }
