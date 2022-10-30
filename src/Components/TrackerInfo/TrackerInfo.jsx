@@ -1,6 +1,6 @@
 import CurrentMatch from "../CurrentMatch/CurrentMatch";
 import PlayerTable from "../PlayerTable/PlayerTable";
-function BracketInfo(props) {
+function TrackerInfo(props) {
   return (
     <div>
       <CurrentMatch
@@ -11,4 +11,4 @@ function BracketInfo(props) {
   );
 }
 
-export default BracketInfo;
+export default TrackerInfo;
