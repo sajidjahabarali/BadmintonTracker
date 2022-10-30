@@ -10,10 +10,12 @@
   margin: 10px;
 }
 
-.matchInfo {
+.matchInfo, .matchCounter {
   margin: 20px;
+  font-size: 30px;
 }
 
 .teamButton {
   width: 10em;
+  font-size: 30px;
 }

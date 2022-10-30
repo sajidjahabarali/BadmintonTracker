@@ -1,15 +1,20 @@
+* {
+  font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+}
+
 body {
   text-align: center;
   background-color: #ececec;
   color: rgb(78, 78, 78);
 }
 
-.App-header {
-  color: coral;
+.App{
+  margin: 15px
 }
 
 .reset-button{
   position: absolute;
   top: 5px;
   right: 5px;
+  font-size: 20px;
 }

@@ -1,3 +1,6 @@
+import { createTheme } from "@mui/material/styles";
+import { orange, blue, white } from "@mui/material/colors";
+
 export const shuffleArray = (array) => {
   let currentIndex = array.length,
     randomIndex;
@@ -37,3 +40,28 @@ export function loadFromLocalStorage(name) {
     return undefined;
   }
 }
+
+export const theme = createTheme({
+  typography: {
+    fontFamily: "Bebas Neue, Arial, Helvetica, sans-serif",
+    fontSize: 18,
+    h1: {
+      fontSize: 40,
+    },
+  },
+  palette: {
+    orange: {
+      main: orange[500],
+    },
+    blue: {
+      main: blue[500],
+    },
+    white: {
+      main: "white",
+    },
+  },
+});
+
+export const buttonTheme = {
+  fontSize: "25px",
+};

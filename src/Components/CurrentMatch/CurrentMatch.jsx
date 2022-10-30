@@ -7,24 +7,14 @@ import {
   addWinToPlayer,
   addLossToPlayer,
 } from "../../redux/Players/players.actions";
-import { shuffleArray } from "../../common.utils";
+import { buttonTheme, shuffleArray } from "../../common.utils";
 import "./CurrentMatch.css";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { orange, blue } from "@mui/material/colors";
+import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
+import { theme } from "../../common.utils";
+import { createTheme } from "@mui/material/styles";
 
 const localStorageKey = "currentMatchState";
-
-const theme = createTheme({
-  palette: {
-    orange: {
-      main: orange[500],
-    },
-    blue: {
-      main: blue[500],
-    },
-  },
-});
 
 function CurrentMatch(props) {
   const getCurrentPlayersDefaultState = () => {
@@ -122,50 +112,56 @@ function CurrentMatch(props) {
 
   return (
     <div>
-      {matchesStarted ? (
-        <div>
-          Matches played: {matchesPlayed}
-          {getMatch()}
-        </div>
-      ) : null}
-      {!(props.players.players.length >= 4) ? null : matchesStarted ? (
-        <ThemeProvider theme={theme}>
-          <div className="button">
-            <Button
-              className="teamButton"
-              variant="contained"
-              color="blue"
-              onClick={() => {
-                createNextMatch("BLUE");
-              }}
-            >
-              Blue wins
-            </Button>
+      <ThemeProvider theme={theme}>
+        {matchesStarted ? (
+          <div className="matchCounter">
+            Matches played: {matchesPlayed}
+            {getMatch()}
           </div>
-          <div className="button">
-            <Button
-              className="teamButton"
-              variant="contained"
-              color="orange"
-              onClick={() => {
-                createNextMatch("ORANGE");
-              }}
-            >
-              Orange wins
-            </Button>
+        ) : null}
+        {!(props.players.players.length >= 4) ? null : matchesStarted ? (
+          <div>
+            <div className="button">
+              <Button
+                style={buttonTheme}
+                className="teamButton"
+                variant="contained"
+                color="blue"
+                onClick={() => {
+                  createNextMatch("BLUE");
+                }}
+              >
+                Blue wins
+              </Button>
+            </div>
+            <div className="button">
+              <Button
+                style={buttonTheme}
+                className="teamButton"
+                variant="contained"
+                color="orange"
+                onClick={() => {
+                  createNextMatch("ORANGE");
+                }}
+              >
+                Orange wins
+              </Button>
+            </div>
           </div>
-        </ThemeProvider>
-      ) : (
-        <Button
-          variant="contained"
-          onClick={() => {
-            createNextMatch();
-            setMatchesStarted(true);
-          }}
-        >
-          Create first match
-        </Button>
-      )}
+        ) : (
+          <Button
+            style={buttonTheme}
+            variant="contained"
+            color="white"
+            onClick={() => {
+              createNextMatch();
+              setMatchesStarted(true);
+            }}
+          >
+            Create first match
+          </Button>
+        )}
+      </ThemeProvider>
     </div>
   );
 }

@@ -5,6 +5,9 @@ import TrackerInfo from "./Components/TrackerInfo/TrackerInfo";
 import { resetPlayerData } from "./redux/Players/players.actions";
 import { useState } from "react";
 import { useEffect } from "react";
+import { Typography } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { theme } from "./common.utils";
 
 function App(props) {
   const [resetButtonPressed, setResetButtonPressed] = useState(false);
@@ -21,15 +24,19 @@ function App(props) {
 
   return (
     <div className="App">
-      <i
-        onClick={() => handleResetButton()}
-        className="reset-button fa-solid fa-arrow-rotate-left"
-      ></i>
-      <header className="App-header">Badminton Tracker</header>
-      <div className="container">
-        <NameInput></NameInput>
-        <TrackerInfo resetButtonPressed={resetButtonPressed}></TrackerInfo>
-      </div>
+      <ThemeProvider theme={theme}>
+        <i
+          onClick={() => handleResetButton()}
+          className="reset-button fa-solid fa-arrow-rotate-left"
+        ></i>
+        <Typography variant="h1" color="blue">
+          Badminton Tracker
+        </Typography>
+        <div className="container">
+          <NameInput></NameInput>
+          <TrackerInfo resetButtonPressed={resetButtonPressed}></TrackerInfo>
+        </div>
+      </ThemeProvider>
     </div>
   );
 }
