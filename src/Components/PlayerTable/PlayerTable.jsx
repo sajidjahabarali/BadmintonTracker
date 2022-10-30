@@ -25,7 +25,7 @@ function PlayerTable(props) {
   };
 
   const handleRelativeStatsButton = (player) => {
-    setRelativeStatsPlayer(player);
+    // setRelativeStatsPlayer(player);
   };
 
   const getTable = () => (
@@ -84,12 +84,12 @@ function PlayerTable(props) {
 
   return props.players.players.length > 0 ? (
     <div>
-      <Modal
+      {/* <Modal
         handleOpen={() => {
           return relativeStatsPlayer !== null;
         }}
         player={props.players.players[0]}
-      ></Modal>
+      ></Modal> */}
       {getTable()}
     </div>
   ) : null;
