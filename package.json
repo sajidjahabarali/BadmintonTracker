@@ -1,7 +1,7 @@
 {
-  "name": "badminton-bracket-app",
+  "name": "BadmintonTracker",
   "version": "0.1.0",
-  "homepage": "https://sajidjahabarali.github.io/BadmintonBracket",
+  "homepage": "https://sajidjahabarali.github.io/BadmintonTracker",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
