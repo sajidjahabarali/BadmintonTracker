@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/BadmintonTracker/static/css/main.c02562cb.css",
+    "main.css": "/BadmintonTracker/static/css/main.e7025bac.css",
     "main.js": "/BadmintonTracker/static/js/main.645d5d7e.js",
     "static/js/787.68a3d154.chunk.js": "/BadmintonTracker/static/js/787.68a3d154.chunk.js",
     "index.html": "/BadmintonTracker/index.html",
-    "main.c02562cb.css.map": "/BadmintonTracker/static/css/main.c02562cb.css.map",
+    "main.e7025bac.css.map": "/BadmintonTracker/static/css/main.e7025bac.css.map",
     "main.645d5d7e.js.map": "/BadmintonTracker/static/js/main.645d5d7e.js.map",
     "787.68a3d154.chunk.js.map": "/BadmintonTracker/static/js/787.68a3d154.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c02562cb.css",
+    "static/css/main.e7025bac.css",
     "static/js/main.645d5d7e.js"
   ]
 }
