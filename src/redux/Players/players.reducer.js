@@ -12,22 +12,26 @@ const INITIAL_STATE = {
   players: [],
 };
 
-const sortByMatches = (a, b) => {
-  if (a.matchMakingMatchesPlayed > b.matchMakingMatchesPlayed) return 1;
-  else if (a.matchMakingMatchesPlayed < b.matchMakingMatchesPlayed) return -1;
+const sortByMatches = (player1, player2) => {
+  if (player1.matchMakingMatchesPlayed > player2.matchMakingMatchesPlayed)
+    return 1;
+  else if (player1.matchMakingMatchesPlayed < player2.matchMakingMatchesPlayed)
+    return -1;
   else return 0;
 };
 
-const sortByFrozen = (a, b) => {
-  if (a.frozen && !b.frozen) return 1;
-  else if (!a.frozen && b.frozen) return -1;
+const sortByFrozen = (player1, player2) => {
+  if (player1.frozen && !player2.frozen) return 1;
+  else if (!player1.frozen && player2.frozen) return -1;
   else return 0;
 };
 
 const sortPlayers = (players) => {
-  const playersSortedByMatches = players.sort((a, b) => sortByMatches(a, b));
-  const playersSortedByMatchesAndFrozen = playersSortedByMatches.sort((a, b) =>
-    sortByFrozen(a, b)
+  const playersSortedByMatches = players.sort((player1, player2) =>
+    sortByMatches(player1, player2)
+  );
+  const playersSortedByMatchesAndFrozen = playersSortedByMatches.sort(
+    (player1, player2) => sortByFrozen(player1, player2)
   );
 
   return playersSortedByMatchesAndFrozen;
