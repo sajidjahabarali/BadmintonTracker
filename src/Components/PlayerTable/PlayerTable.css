@@ -3,5 +3,28 @@
 }
 
 .frozen {
-  color: dodgerblue
+  color: #2196f3
+}
+
+.showStats {
+  color: #ff9800
+}
+
+.sortIcon {
+  position: absolute;
+  font-size: 10px;
+}
+
+.sortIcon.up{
+  top: 50%;
+  transform: translate(5px, -100%);
+}
+
+.sortIcon.down{
+  top: 50%;
+  transform: translate(5px, -50%);
+}
+
+.tableHeadCell {
+  position: relative;
 }

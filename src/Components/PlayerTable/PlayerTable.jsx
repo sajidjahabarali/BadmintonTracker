@@ -1,33 +1,49 @@
 import { connect } from "react-redux";
 import { togglePlayerFrozen } from "../../redux/Players/players.actions";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Modal from "../Modal/Modal";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  ThemeProvider,
+} from "@mui/material";
+import StatsModal from "../StatsModal/StatsModal";
 import { useState } from "react";
-import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../../common.utils";
 import "./PlayerTable.css";
-
-const getWinRate = (wins, actualGamesPlayed) =>
-  actualGamesPlayed > 0
-    ? ((parseFloat(wins) / parseFloat(actualGamesPlayed)) * 100).toFixed(1)
-    : "-";
+import { useEffect } from "react";
 
 function PlayerTable(props) {
   const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
+  const [playersCopy, setPlayersCopy] = useState(props.players.players);
+  const [sort, setSort] = useState({});
+
+  useEffect(() => {
+    setPlayersCopy(props.players.players);
+  }, [props.players.players]);
+
+  const getWinRate = (wins, actualGamesPlayed) =>
+    actualGamesPlayed > 0
+      ? ((parseFloat(wins) / parseFloat(actualGamesPlayed)) * 100).toFixed(1)
+      : "-";
 
   const handleFreezePlayerToggle = (player) => {
     props.togglePlayerFrozen(player.name);
   };
 
   const handleRelativeStatsButton = (player) => {
-    // setRelativeStatsPlayer(player);
+    setRelativeStatsPlayer(player);
   };
+
+  const sortIcons = () => (
+    <div className="sortIcons">
+      <i className="fa-solid fa-sort-up sortIcon up"></i>
+      <i className="fa-solid fa-sort-down sortIcon down"></i>
+    </div>
+  );
 
   const getTable = () => (
     <div className="container">
@@ -36,28 +52,35 @@ function PlayerTable(props) {
           <Table sx={{ minWidth: 150 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">
-                  <i class="fa-solid fa-user"></i>
+                <TableCell align="left" className="tableHeadCell">
+                  <i className="fa-solid fa-user"></i>
                 </TableCell>
-                <TableCell align="right">
-                  <i class="fa-solid fa-w"></i>
+                <TableCell align="right" className="tableHeadCell">
+                  <i className="fa-solid fa-w"></i>
+                  {sortIcons()}
                 </TableCell>
-                <TableCell align="right">
-                  <i class="fa-solid fa-l"></i>
+                <TableCell align="right" className="tableHeadCell">
+                  <i className="fa-solid fa-l"></i>
+                  {sortIcons()}
                 </TableCell>
-                <TableCell align="right">
-                  <i class="fa-solid fa-hashtag"></i>
+                <TableCell align="right" className="tableHeadCell">
+                  <i className="fa-solid fa-hashtag"></i>
+                  {sortIcons()}
                 </TableCell>
-                <TableCell align="right">
-                  <i class="fa-solid fa-percent"></i>
+                <TableCell align="right" className="tableHeadCell">
+                  <i
+                    onClick={() => console.log("percent click")}
+                    className="fa-solid fa-percent"
+                  ></i>
+                  {sortIcons()}
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" className="tableHeadCell">
                   <i className="fa-solid fa-gear"></i>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.players.players.map((player, key) => (
+              {playersCopy.map((player, key) => (
                 <TableRow key={key}>
                   <TableCell align="left">{player.name}</TableCell>
                   <TableCell align="right">{player.wins}</TableCell>
@@ -76,9 +99,13 @@ function PlayerTable(props) {
                         "fa-regular fa-snowflake icon"
                       }
                     ></i>
+
                     <i
                       onClick={() => handleRelativeStatsButton(player)}
-                      className="fa-solid fa-chart-simple icon"
+                      className={
+                        (relativeStatsPlayer === player ? "showStats " : "") +
+                        "fa-solid fa-chart-simple icon"
+                      }
                     ></i>
                   </TableCell>
                 </TableRow>
@@ -90,14 +117,14 @@ function PlayerTable(props) {
     </div>
   );
 
-  return props.players.players.length > 0 ? (
+  return playersCopy.length > 0 ? (
     <div>
-      {/* <Modal
-        handleOpen={() => {
-          return relativeStatsPlayer !== null;
-        }}
-        player={props.players.players[0]}
-      ></Modal> */}
+      {relativeStatsPlayer !== null ? (
+        <StatsModal
+          setRelativeStatsPlayer={setRelativeStatsPlayer}
+          player={relativeStatsPlayer}
+        ></StatsModal>
+      ) : null}
       {getTable()}
     </div>
   ) : null;
