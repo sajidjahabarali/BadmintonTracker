@@ -28,3 +28,11 @@
 .tableHeadCell {
   position: relative;
 }
+
+.leftAlignedIconWrapper {
+  width: 40px;
+}
+
+.leftAlignedSortIcon {
+  left: 30px;
+}

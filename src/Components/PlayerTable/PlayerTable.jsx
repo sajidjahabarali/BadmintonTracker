@@ -14,7 +14,7 @@ import StatsModal from "../StatsModal/StatsModal";
 import { useState } from "react";
 import { theme } from "../../common.utils";
 import "./PlayerTable.css";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 
 const SortType = {
   ASC: "ASC",
@@ -30,43 +30,35 @@ function PlayerTable(props) {
     setPlayersCopy(props.players.players);
   }, [props.players.players]);
 
-  const sortTable = useCallback(() => {
-    const sortedPlayersCopy = playersCopy.sort((player1, player2) => {
-      console.log(sort.column);
-      if (sort.column === "winRate") {
-        switch (sort.type) {
-          case "ASC":
+  const sortPlayersCopy = (column, sortType) => {
+    return playersCopy.sort((player1, player2) => {
+      if (column === "winRate") {
+        switch (sortType) {
+          case SortType.ASC:
             return getWinRate(player1.wins, player1.actualMatchesPlayed) <
               getWinRate(player2.wins, player2.actualMatchesPlayed)
-              ? 1
-              : -1;
-          case "DESC":
+              ? -1
+              : 1;
+          case SortType.DESC:
             return getWinRate(player1.wins, player1.actualMatchesPlayed) >
               getWinRate(player2.wins, player2.actualMatchesPlayed)
-              ? 1
-              : -1;
+              ? -1
+              : 1;
           default:
             return 0;
         }
       } else {
-        switch (sort.type) {
-          case "ASC":
-            return player1[sort.column] < player2[sort.column] ? 1 : -1;
-          case "DESC":
-            return player1[sort.column] > player2[sort.column] ? 1 : -1;
+        switch (sortType) {
+          case SortType.ASC:
+            return player1[column] < player2[column] ? -1 : 1;
+          case SortType.DESC:
+            return player1[column] > player2[column] ? -1 : 1;
           default:
             return 0;
         }
       }
     });
-
-    setPlayersCopy(sortedPlayersCopy);
-  }, [playersCopy, sort.column, sort.type]);
-
-  useEffect(() => {
-    console.log(sort);
-    sortTable();
-  }, [sort, sortTable]);
+  };
 
   const getWinRate = (wins, actualMatchesPlayed) =>
     actualMatchesPlayed > 0
@@ -84,20 +76,37 @@ function PlayerTable(props) {
         ? sortTypeKeys[sortTypeKeys.indexOf(sort.type) + 1] ?? sortTypeKeys[0]
         : sortTypeKeys[0];
 
+    const sortedPlayersCopy = sortPlayersCopy(column, nextSortTypeKey);
     setSort({
       column: column,
       type: nextSortTypeKey,
     });
+
+    setPlayersCopy(sortedPlayersCopy);
   };
 
   const handleRelativeStatsButton = (player) => {
     setRelativeStatsPlayer(player);
   };
 
-  const sortIcons = () => (
+  const sortIcons = (leftAlignedIcon) => (
     <div className="sortIcons">
-      <i className="fa-solid fa-sort-up sortIcon up"></i>
-      <i className="fa-solid fa-sort-down sortIcon down"></i>
+      {sort.type === SortType.ASC && (
+        <i
+          className={
+            "fa-solid fa-sort-up sortIcon up" +
+            (leftAlignedIcon ? " leftAlignedSortIcon" : "")
+          }
+        ></i>
+      )}
+      {sort.type === SortType.DESC && (
+        <i
+          className={
+            "fa-solid fa-sort-down sortIcon down" +
+            (leftAlignedIcon ? " leftAlignedSortIcon" : "")
+          }
+        ></i>
+      )}
     </div>
   );
 
@@ -109,38 +118,41 @@ function PlayerTable(props) {
             <TableHead>
               <TableRow>
                 <TableCell align="left" className="tableHeadCell">
-                  <i
-                    onClick={() => handleSortButton("name")}
-                    className="fa-solid fa-user"
-                  ></i>
+                  <div className="leftAlignedIconWrapper">
+                    <i
+                      onClick={() => handleSortButton("name")}
+                      className="fa-solid fa-user"
+                    ></i>
+                    {sort.column === "name" && sortIcons(true)}
+                  </div>
                 </TableCell>
                 <TableCell align="right" className="tableHeadCell">
                   <i
                     onClick={() => handleSortButton("wins")}
                     className="fa-solid fa-w"
                   ></i>
-                  {sortIcons()}
+                  {sort.column === "wins" && sortIcons(false)}
                 </TableCell>
                 <TableCell align="right" className="tableHeadCell">
                   <i
                     onClick={() => handleSortButton("losses")}
                     className="fa-solid fa-l"
                   ></i>
-                  {sortIcons()}
+                  {sort.column === "losses" && sortIcons(false)}
                 </TableCell>
                 <TableCell align="right" className="tableHeadCell">
                   <i
                     onClick={() => handleSortButton("actualMatchesPlayed")}
                     className="fa-solid fa-hashtag"
                   ></i>
-                  {sortIcons()}
+                  {sort.column === "actualMatchesPlayed" && sortIcons(false)}
                 </TableCell>
                 <TableCell align="right" className="tableHeadCell">
                   <i
                     onClick={() => handleSortButton("winRate")}
                     className="fa-solid fa-percent"
                   ></i>
-                  {sortIcons()}
+                  {sort.column === "winRate" && sortIcons(false)}
                 </TableCell>
                 <TableCell align="center" className="tableHeadCell">
                   <i className="fa-solid fa-gear"></i>
