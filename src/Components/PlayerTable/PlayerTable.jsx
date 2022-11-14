@@ -24,7 +24,10 @@ const SortType = {
 function PlayerTable(props) {
   const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
   const [playersCopy, setPlayersCopy] = useState(props.players.players);
-  const [sort, setSort] = useState({ column: null, type: undefined });
+  const [sort, setSort] = useState({
+    column: "actualMatchesPlayed",
+    type: SortType.ASC,
+  });
 
   useEffect(() => {
     setPlayersCopy(props.players.players);
