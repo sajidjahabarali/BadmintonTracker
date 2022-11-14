@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useEffect } from "react";
 import {
-  addMatchToPlayer,
   addWinToPlayer,
   addLossToPlayer,
 } from "../../redux/Players/players.actions";
@@ -12,7 +11,6 @@ import "./CurrentMatch.css";
 import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
 import { theme } from "../../common.utils";
-import { createTheme } from "@mui/material/styles";
 
 const localStorageKey = "currentMatchState";
 
@@ -70,10 +68,7 @@ function CurrentMatch(props) {
   }, [currentPlayers, matchesPlayed, matchesStarted]);
 
   const createNextMatch = (winningTeam) => {
-    if (winningTeam) {
-      currentPlayers.forEach((player) => props.addMatchToPlayer(player.name));
-      setMatchesPlayed(matchesPlayed + 1);
-    }
+    setMatchesPlayed(matchesPlayed + 1);
 
     switch (winningTeam) {
       case "BLUE":
@@ -174,9 +169,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addMatchToPlayer: (payload) => {
-      dispatch(addMatchToPlayer(payload));
-    },
     addWinToPlayer: (payload) => {
       dispatch(addWinToPlayer(payload));
     },

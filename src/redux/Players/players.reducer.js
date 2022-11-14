@@ -1,7 +1,6 @@
 import {
   RESET_PLAYER_DATA,
   ADD_PLAYER,
-  ADD_MATCH_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
@@ -10,6 +9,7 @@ import { shuffleArray } from "../../common.utils";
 
 const INITIAL_STATE = {
   players: [],
+  pairings: [],
 };
 
 const sortByMatches = (player1, player2) => {
@@ -50,6 +50,20 @@ const equalMatchesForAllPlayers = (players) => {
   return true;
 };
 
+// const updateRelativeStats = (playersCopy) => {
+//   const newRelativeStats = playersCopy.map((player) => {
+//     return playersCopy
+//       .filter((relativePlayer) => relativePlayer.name !== player.name)
+//       .reduce((previousResult, relativePlayer) => {
+//         return { ...player, relativeStats: { teammates: [], opponents: [] } };
+//       });
+//   });
+
+//   return { teammates: newRelativeStats, opponents: newRelativeStats };
+// };
+
+const updatePairings = () => {};
+
 const reducer = (state = INITIAL_STATE, action) => {
   let playersCopy = [...state.players];
   let newPlayersState = [];
@@ -66,8 +80,9 @@ const reducer = (state = INITIAL_STATE, action) => {
         matchMakingMatchesPlayed:
           playersCopy.length > 0 ? playersCopy[0].matchMakingMatchesPlayed : 0,
         frozen: false,
-        relativeStats: [],
       });
+
+      updatePairings(playersCopy);
 
       newPlayersState = sortPlayers(playersCopy);
       break;
@@ -84,9 +99,10 @@ const reducer = (state = INITIAL_STATE, action) => {
       newPlayersState = sortPlayers(playersCopy);
       break;
 
-    case ADD_MATCH_TO_PLAYER:
+    case ADD_WIN_TO_PLAYER:
       playersCopy.forEach((player) => {
         if (player.name === action.payload) {
+          player.wins++;
           player.actualMatchesPlayed++;
           player.matchMakingMatchesPlayed++;
         }
@@ -97,24 +113,18 @@ const reducer = (state = INITIAL_STATE, action) => {
         : sortPlayers(playersCopy);
       break;
 
-    case ADD_WIN_TO_PLAYER:
-      playersCopy.forEach((player) => {
-        if (player.name === action.payload) {
-          player.wins++;
-        }
-      });
-
-      newPlayersState = sortPlayers(playersCopy);
-      break;
-
     case ADD_LOSS_TO_PLAYER:
       playersCopy.forEach((player) => {
         if (player.name === action.payload) {
           player.losses++;
+          player.actualMatchesPlayed++;
+          player.matchMakingMatchesPlayed++;
         }
       });
 
-      newPlayersState = sortPlayers(playersCopy);
+      newPlayersState = equalMatchesForAllPlayers(playersCopy)
+        ? shuffleArray(playersCopy).sort((a, b) => sortByFrozen(a, b))
+        : sortPlayers(playersCopy);
       break;
 
     default:

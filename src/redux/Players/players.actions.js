@@ -1,7 +1,6 @@
 import {
   RESET_PLAYER_DATA,
   ADD_PLAYER,
-  ADD_MATCH_TO_PLAYER,
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
@@ -23,13 +22,6 @@ export const addPlayer = (payload) => {
 export const togglePlayerFrozen = (payload) => {
   return {
     type: TOGGLE_PLAYER_FROZEN,
-    payload: payload,
-  };
-};
-
-export const addMatchToPlayer = (payload) => {
-  return {
-    type: ADD_MATCH_TO_PLAYER,
     payload: payload,
   };
 };
