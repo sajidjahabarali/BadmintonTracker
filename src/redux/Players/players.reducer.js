@@ -111,7 +111,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         frozen: false,
       });
 
-      newPairingsState = updatePairings(action.payload, state.players, [
+      newPairingsState = updatePairings(action.payload, state.playerDetails, [
         ...pairingsCopy,
       ]);
 
@@ -162,7 +162,6 @@ const reducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 
-  newPairingsState = newPairingsState ?? pairingsCopy;
   return {
     ...state,
     playerDetails: newPlayerDetailsState,
