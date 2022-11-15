@@ -12,24 +12,24 @@ import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
 import { theme } from "../../common.utils";
 
-const localStorageKey = "currentMatchState";
+const LOCAL_STORAGE_KEY = "currentMatchState";
 
 function CurrentMatch(props) {
   const getCurrentPlayersDefaultState = () => {
-    return loadFromLocalStorage(localStorageKey)
-      ? loadFromLocalStorage(localStorageKey).currentPlayers
+    return loadFromLocalStorage(LOCAL_STORAGE_KEY)
+      ? loadFromLocalStorage(LOCAL_STORAGE_KEY).currentPlayers
       : [];
   };
 
   const getMatchesStartedDefaultState = () => {
-    return loadFromLocalStorage(localStorageKey)
-      ? loadFromLocalStorage(localStorageKey).matchesStarted
+    return loadFromLocalStorage(LOCAL_STORAGE_KEY)
+      ? loadFromLocalStorage(LOCAL_STORAGE_KEY).matchesStarted
       : false;
   };
 
   const getMatchesPlayedDefaultState = () => {
-    return loadFromLocalStorage(localStorageKey)
-      ? loadFromLocalStorage(localStorageKey).matchesPlayed
+    return loadFromLocalStorage(LOCAL_STORAGE_KEY)
+      ? loadFromLocalStorage(LOCAL_STORAGE_KEY).matchesPlayed
       : 0;
   };
 
@@ -52,23 +52,23 @@ function CurrentMatch(props) {
   }, [props.resetButtonPressed]);
 
   useEffect(() => {
-    if (props.players.players.length >= 4) {
+    if (props.playerDetails.length >= 4) {
       const currentPlayersShuffled = shuffleArray(
-        props.players.players.slice(0, 4)
+        props.playerDetails.slice(0, 4)
       );
       setCurrentPlayers(currentPlayersShuffled);
     }
-  }, [props.players.players]);
+  }, [props.playerDetails]);
 
   useEffect(() => {
     saveToLocalStorage(
       { currentPlayers, matchesStarted, matchesPlayed },
-      localStorageKey
+      LOCAL_STORAGE_KEY
     );
   }, [currentPlayers, matchesPlayed, matchesStarted]);
 
   const createNextMatch = (winningTeam) => {
-    setMatchesPlayed(matchesPlayed + 1);
+    if (winningTeam) setMatchesPlayed(matchesPlayed + 1);
 
     switch (winningTeam) {
       case "BLUE":
@@ -114,7 +114,7 @@ function CurrentMatch(props) {
             {getMatch()}
           </div>
         ) : null}
-        {!(props.players.players.length >= 4) ? null : matchesStarted ? (
+        {!(props.playerDetails.length >= 4) ? null : matchesStarted ? (
           <div>
             <div className="button">
               <Button
@@ -163,7 +163,8 @@ function CurrentMatch(props) {
 
 const mapStateToProps = (state) => {
   return {
-    players: state.players,
+    playerDetails: state.players.playerDetails ?? [],
+    pairings: state.players.pairings ?? [],
   };
 };
 

@@ -23,15 +23,15 @@ const SortType = {
 
 function PlayerTable(props) {
   const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
-  const [playersCopy, setPlayersCopy] = useState(props.players.players);
+  const [playersCopy, setPlayersCopy] = useState(props.playerDetails);
   const [sort, setSort] = useState({
     column: "actualMatchesPlayed",
     type: SortType.ASC,
   });
 
   useEffect(() => {
-    setPlayersCopy(props.players.players);
-  }, [props.players.players]);
+    setPlayersCopy(props.playerDetails);
+  }, [props.playerDetails]);
 
   const sortPlayersCopy = (column, sortType) => {
     return playersCopy.sort((player1, player2) => {
@@ -215,7 +215,8 @@ function PlayerTable(props) {
 
 const mapStateToProps = (state) => {
   return {
-    players: state.players,
+    playerDetails: state.players.playerDetails ?? [],
+    pairings: state.players.pairings ?? [],
   };
 };
 

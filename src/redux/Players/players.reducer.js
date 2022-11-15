@@ -8,7 +8,7 @@ import {
 import { shuffleArray } from "../../common.utils";
 
 const INITIAL_STATE = {
-  players: [],
+  playerDetails: [],
   pairings: [],
 };
 
@@ -62,45 +62,76 @@ const equalMatchesForAllPlayers = (players) => {
 //   return { teammates: newRelativeStats, opponents: newRelativeStats };
 // };
 
-const updatePairings = () => {};
+const updatePairings = (newPlayerName, existingPlayers, pairingsCopy) => {
+  // console.log(newPlayerName, existingPlayers);
+  for (let existingPlayerKey in existingPlayers) {
+    pairingsCopy.push({
+      players: [newPlayerName, existingPlayers[existingPlayerKey].name],
+      teammates: {
+        wins: 0,
+        losses: 0,
+        matchesPlayed: 0,
+      },
+      opponents: {
+        wins: 0,
+        losses: 0,
+        matchesPlayed: 0,
+      },
+    });
+  }
+
+  return pairingsCopy;
+};
+
+const createStateSliceCopy = (slice) => {
+  return slice.map((currentPlayerDetail) =>
+    JSON.parse(JSON.stringify(currentPlayerDetail))
+  );
+};
 
 const reducer = (state = INITIAL_STATE, action) => {
-  let playersCopy = [...state.players];
-  let newPlayersState = [];
+  let playerDetailsCopy = createStateSliceCopy(state.playerDetails);
+  let pairingsCopy = createStateSliceCopy(state.pairings);
+  let newPlayerDetailsState = [];
+  let newPairingsState = [];
   switch (action.type) {
     case RESET_PLAYER_DATA:
-      return { players: [] };
+      return { playerDetails: [], pairings: [] };
 
     case ADD_PLAYER:
-      playersCopy.push({
+      playerDetailsCopy.push({
         name: action.payload,
         wins: 0,
         losses: 0,
         actualMatchesPlayed: 0,
         matchMakingMatchesPlayed:
-          playersCopy.length > 0 ? playersCopy[0].matchMakingMatchesPlayed : 0,
+          playerDetailsCopy.length > 0
+            ? playerDetailsCopy[0].matchMakingMatchesPlayed
+            : 0,
         frozen: false,
       });
 
-      updatePairings(playersCopy);
+      newPairingsState = updatePairings(action.payload, state.players, [
+        ...pairingsCopy,
+      ]);
 
-      newPlayersState = sortPlayers(playersCopy);
+      newPlayerDetailsState = sortPlayers(playerDetailsCopy);
       break;
 
     case TOGGLE_PLAYER_FROZEN:
-      playersCopy.forEach((player) => {
+      playerDetailsCopy.forEach((player) => {
         if (player.name === action.payload) {
           player.frozen = !player.frozen;
           player.matchMakingMatchesPlayed =
-            playersCopy[0].matchMakingMatchesPlayed;
+            playerDetailsCopy[0].matchMakingMatchesPlayed;
         }
       });
 
-      newPlayersState = sortPlayers(playersCopy);
+      newPlayerDetailsState = sortPlayers(playerDetailsCopy);
       break;
 
     case ADD_WIN_TO_PLAYER:
-      playersCopy.forEach((player) => {
+      playerDetailsCopy.forEach((player) => {
         if (player.name === action.payload) {
           player.wins++;
           player.actualMatchesPlayed++;
@@ -108,13 +139,13 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
       });
 
-      newPlayersState = equalMatchesForAllPlayers(playersCopy)
-        ? shuffleArray(playersCopy).sort((a, b) => sortByFrozen(a, b))
-        : sortPlayers(playersCopy);
+      newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
+        ? shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
+        : sortPlayers(playerDetailsCopy);
       break;
 
     case ADD_LOSS_TO_PLAYER:
-      playersCopy.forEach((player) => {
+      playerDetailsCopy.forEach((player) => {
         if (player.name === action.payload) {
           player.losses++;
           player.actualMatchesPlayed++;
@@ -122,18 +153,20 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
       });
 
-      newPlayersState = equalMatchesForAllPlayers(playersCopy)
-        ? shuffleArray(playersCopy).sort((a, b) => sortByFrozen(a, b))
-        : sortPlayers(playersCopy);
+      newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
+        ? shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
+        : sortPlayers(playerDetailsCopy);
       break;
 
     default:
       return state;
   }
 
+  newPairingsState = newPairingsState ?? pairingsCopy;
   return {
     ...state,
-    players: newPlayersState,
+    playerDetails: newPlayerDetailsState,
+    pairings: newPairingsState,
   };
 };
 
