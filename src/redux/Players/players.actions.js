@@ -4,6 +4,7 @@ import {
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
+  UPDATE_RELATIVE_STATS_FOR_PLAYERS,
 } from "./players.types";
 
 export const resetPlayerData = () => {
@@ -36,6 +37,13 @@ export const addWinToPlayer = (payload) => {
 export const addLossToPlayer = (payload) => {
   return {
     type: ADD_LOSS_TO_PLAYER,
+    payload: payload,
+  };
+};
+
+export const updateRelativeStatsForPlayers = (payload) => {
+  return {
+    type: UPDATE_RELATIVE_STATS_FOR_PLAYERS,
     payload: payload,
   };
 };

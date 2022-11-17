@@ -4,6 +4,7 @@ import {
   ADD_WIN_TO_PLAYER,
   ADD_LOSS_TO_PLAYER,
   TOGGLE_PLAYER_FROZEN,
+  UPDATE_RELATIVE_STATS_FOR_PLAYERS,
 } from "./players.types";
 import { shuffleArray } from "../../common.utils";
 
@@ -62,7 +63,11 @@ const equalMatchesForAllPlayers = (players) => {
 //   return { teammates: newRelativeStats, opponents: newRelativeStats };
 // };
 
-const updatePairings = (newPlayerName, existingPlayers, pairingsCopy) => {
+const updatePairingsForNewPlayer = (
+  newPlayerName,
+  existingPlayers,
+  pairingsCopy
+) => {
   // console.log(newPlayerName, existingPlayers);
   for (let existingPlayerKey in existingPlayers) {
     pairingsCopy.push({
@@ -73,8 +78,8 @@ const updatePairings = (newPlayerName, existingPlayers, pairingsCopy) => {
         matchesPlayed: 0,
       },
       opponents: {
-        wins: 0,
-        losses: 0,
+        player1WinsAndPlayer2Losses: 0,
+        player2WinsAndPlayer1Losses: 0,
         matchesPlayed: 0,
       },
     });
@@ -83,11 +88,28 @@ const updatePairings = (newPlayerName, existingPlayers, pairingsCopy) => {
   return pairingsCopy;
 };
 
+const pairingMatches = (pairing, players) => {
+  // return players.reduce((previousValue, currentPlayer) => {
+  //   return previousValue && pairing.players.includes(currentPlayer);
+  // }, true);
+  for (let playerKey in players) {
+    if (!pairing.includes(players[playerKey])) return false;
+  }
+  return true;
+};
+
 const createStateSliceCopy = (slice) => {
   return slice.map((currentPlayerDetail) =>
     JSON.parse(JSON.stringify(currentPlayerDetail))
   );
 };
+
+const teammatePairing = (pairing, { player, teammate }) =>
+  pairingMatches(pairing.players, [player, teammate]);
+
+const opponentPairing = (pairing, { player, opponents }) =>
+  pairingMatches(pairing.players, [player, opponents[0]]) ||
+  pairingMatches(pairing.players, [player, opponents[1]]);
 
 const reducer = (state = INITIAL_STATE, action) => {
   let playerDetailsCopy = createStateSliceCopy(state.playerDetails);
@@ -111,9 +133,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         frozen: false,
       });
 
-      newPairingsState = updatePairings(action.payload, state.playerDetails, [
-        ...pairingsCopy,
-      ]);
+      newPairingsState = updatePairingsForNewPlayer(
+        action.payload,
+        state.playerDetails,
+        [...pairingsCopy]
+      );
 
       newPlayerDetailsState = sortPlayers(playerDetailsCopy);
       break;
@@ -158,8 +182,111 @@ const reducer = (state = INITIAL_STATE, action) => {
         : sortPlayers(playerDetailsCopy);
       break;
 
+    case UPDATE_RELATIVE_STATS_FOR_PLAYERS:
+      const { winningTeamPlayers, losingTeamPlayers } = action.payload;
+      newPairingsState = pairingsCopy.map((pairing) => {
+        let newPairing = JSON.parse(JSON.stringify(pairing));
+        newPairing = winningTeamPlayers.reduce(
+          (previousValue, currentPlayer) => {
+            return previousValue && newPairing.players.includes(currentPlayer);
+          },
+          true
+        )
+          ? {
+              players: newPairing.players,
+              teammates: {
+                wins: newPairing.teammates.wins + 1,
+                losses: newPairing.teammates.losses,
+                matchesPlayed: newPairing.teammates.matchesPlayed++,
+              },
+              opponents: newPairing.opponents,
+            }
+          : newPairing;
+
+        if (JSON.stringify(newPairing) !== JSON.stringify(pairing))
+          return newPairing;
+
+        newPairing = losingTeamPlayers.reduce(
+          (previousValue, currentPlayer) => {
+            return previousValue && newPairing.players.includes(currentPlayer);
+          },
+          true
+        )
+          ? {
+              players: newPairing.players,
+              teammates: {
+                wins: newPairing.teammates.wins,
+                losses: newPairing.teammates.losses + 1,
+                matchesPlayed: newPairing.teammates.matchesPlayed + 1,
+              },
+              opponents: newPairing.opponents,
+            }
+          : newPairing;
+
+        if (JSON.stringify(newPairing) !== JSON.stringify(pairing))
+          return newPairing;
+
+        // console.log(newPairing);
+        // if (
+        //   newPairing.players.reduce((previousValue, currentPlayer) => {
+        //     return (
+        //       previousValue &&
+        //       (winningTeamPlayers.includes(currentPlayer) ||
+        //         losingTeamPlayers.includes(currentPlayer))
+        //     );
+        //   }, true)
+        // ) {
+        //   console.log("opponents: ", newPairing);
+        // }
+
+        newPairing = newPairing.players.reduce(
+          (previousValue, currentPlayer) => {
+            return (
+              previousValue &&
+              (winningTeamPlayers.includes(currentPlayer) ||
+                losingTeamPlayers.includes(currentPlayer))
+            );
+          },
+          true
+        )
+          ? winningTeamPlayers.includes(newPairing.players[0])
+            ? {
+                players: newPairing.players,
+                teammates: newPairing.teammates,
+                opponents: {
+                  player1WinsAndPlayer2Losses:
+                    newPairing.opponents.player1WinsAndPlayer2Losses + 1,
+                  player2WinsAndPlayer1Losses:
+                    newPairing.opponents.player2WinsAndPlayer1Losses,
+                  matchesPlayed: newPairing.opponents.matchesPlayed + 1,
+                },
+              }
+            : {
+                players: newPairing.players,
+                teammates: newPairing.teammates,
+                opponents: {
+                  player1WinsAndPlayer2Losses:
+                    newPairing.opponents.player1WinsAndPlayer2Losses,
+                  player2WinsAndPlayer1Losses:
+                    newPairing.opponents.player2WinsAndPlayer1Losses + 1,
+                  matchesPlayed: newPairing.opponents.matchesPlayed + 1,
+                },
+              }
+          : newPairing;
+
+        return newPairing;
+      });
+      break;
+
     default:
       return state;
+  }
+
+  if (newPairingsState.length === 0) {
+    newPairingsState = pairingsCopy;
+  }
+  if (newPlayerDetailsState.length === 0) {
+    newPlayerDetailsState = playerDetailsCopy;
   }
 
   return {
