@@ -197,7 +197,7 @@ const reducer = (state = INITIAL_STATE, action) => {
               teammates: {
                 wins: newPairing.teammates.wins + 1,
                 losses: newPairing.teammates.losses,
-                matchesPlayed: newPairing.teammates.matchesPlayed++,
+                matchesPlayed: newPairing.teammates.matchesPlayed + 1,
               },
               opponents: newPairing.opponents,
             }
