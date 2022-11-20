@@ -23,28 +23,35 @@ const SortType = {
 
 function PlayerTable(props) {
   const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
-  const [playersCopy, setPlayersCopy] = useState(props.playerDetails);
+  const [playersCopy, setPlayersCopy] = useState(
+    JSON.parse(JSON.stringify(props.playerDetails))
+  );
   const [sort, setSort] = useState({
     column: "actualMatchesPlayed",
     type: SortType.ASC,
   });
 
   useEffect(() => {
-    setPlayersCopy(props.playerDetails);
+    setPlayersCopy(JSON.parse(JSON.stringify(props.playerDetails)));
   }, [props.playerDetails]);
 
   const sortPlayersCopy = (column, sortType) => {
     return playersCopy.sort((player1, player2) => {
       if (column === "winRate") {
+        if (!bothPlayerWinRatesExist(player1, player2)) return 0;
         switch (sortType) {
           case SortType.ASC:
-            return getWinRate(player1.wins, player1.actualMatchesPlayed) <
-              getWinRate(player2.wins, player2.actualMatchesPlayed)
+            return parseFloat(
+              getWinRate(player1.wins, player1.actualMatchesPlayed)
+            ) <
+              parseFloat(getWinRate(player2.wins, player2.actualMatchesPlayed))
               ? -1
               : 1;
           case SortType.DESC:
-            return getWinRate(player1.wins, player1.actualMatchesPlayed) >
-              getWinRate(player2.wins, player2.actualMatchesPlayed)
+            return parseFloat(
+              getWinRate(player1.wins, player1.actualMatchesPlayed)
+            ) >
+              parseFloat(getWinRate(player2.wins, player2.actualMatchesPlayed))
               ? -1
               : 1;
           default:
@@ -70,6 +77,13 @@ function PlayerTable(props) {
 
   const handleFreezePlayerToggle = (player) => {
     props.togglePlayerFrozen(player.name);
+  };
+
+  const bothPlayerWinRatesExist = (player1, player2) => {
+    return (
+      getWinRate(player1.wins, player1.actualMatchesPlayed) !== "-" &&
+      getWinRate(player2.wins, player2.actualMatchesPlayed) !== "-"
+    );
   };
 
   const handleSortButton = (column) => {
