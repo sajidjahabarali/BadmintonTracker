@@ -45,10 +45,6 @@ function CurrentMatch(props) {
   );
 
   useEffect(() => {
-    console.log(props.pairings);
-  }, [props]);
-
-  useEffect(() => {
     if (props.resetButtonPressed) {
       setCurrentPlayers([]);
       setMatchesPlayed(0);

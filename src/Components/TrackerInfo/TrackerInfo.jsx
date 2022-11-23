@@ -1,5 +1,5 @@
 import CurrentMatch from "../CurrentMatch/CurrentMatch";
-import PlayerTable from "../PlayerTable/PlayerTable";
+import IndividualPlayerStatsTable from "../StatsTables/IndividualPlayerStatsTable/IndividualPlayerStatsTable";
 import "./TrackerInfo.css";
 function TrackerInfo(props) {
   return (
@@ -10,7 +10,7 @@ function TrackerInfo(props) {
         ></CurrentMatch>
       </div>
       <div className="trackerInfoComponent">
-        <PlayerTable></PlayerTable>
+        <IndividualPlayerStatsTable></IndividualPlayerStatsTable>
       </div>
     </div>
   );

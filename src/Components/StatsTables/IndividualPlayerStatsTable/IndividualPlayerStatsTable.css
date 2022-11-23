@@ -1,0 +1,15 @@
+.icon {
+  margin: 10px;
+}
+
+.frozen {
+  color: #2196f3
+}
+
+.showStats {
+  color: #ff9800
+}
+
+.tableHeadCell {
+  position: relative;
+}

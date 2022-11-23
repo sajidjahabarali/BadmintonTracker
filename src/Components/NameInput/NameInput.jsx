@@ -91,7 +91,6 @@ function NameInput(props) {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     playerDetails: state.players.playerDetails,
   };
