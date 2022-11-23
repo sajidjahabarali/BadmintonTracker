@@ -46,8 +46,8 @@ function NameInput(props) {
     !(name.includes(" ") || nameAlreadyExists(name.toUpperCase()));
 
   const nameAlreadyExists = (name) => {
-    for (let player in props.players.players) {
-      if (props.players.players[player].name === name) return true;
+    for (let player in props.playerDetails) {
+      if (props.playerDetails[player].name === name) return true;
     }
 
     return false;
@@ -91,8 +91,9 @@ function NameInput(props) {
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
-    players: state.players,
+    playerDetails: state.players.playerDetails,
   };
 };
 
