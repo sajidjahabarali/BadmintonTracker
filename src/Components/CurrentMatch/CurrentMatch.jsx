@@ -69,20 +69,6 @@ function CurrentMatch(props) {
     );
   }, [currentPlayers, matchesPlayed, matchesStarted]);
 
-  const updatePlayerState = (player, teammate, opponents, wonGame) => {
-    if (wonGame) {
-      props.addWinToPlayer(player);
-    } else {
-      props.addLossToPlayer(player);
-    }
-    props.updateRelativeStatsForPlayers({
-      player: player,
-      teammate: teammate,
-      opponents: opponents,
-      wonGame: wonGame,
-    });
-  };
-
   const createNextMatch = (winningTeam) => {
     if (winningTeam) {
       setMatchesPlayed(matchesPlayed + 1);
@@ -148,7 +134,6 @@ function CurrentMatch(props) {
           <div>
             <div className="button">
               <Button
-                // style={buttonTheme}
                 className="teamButton"
                 variant="contained"
                 type="matchButton"

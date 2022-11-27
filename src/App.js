@@ -6,7 +6,7 @@ import { resetPlayerData } from "./redux/Players/players.actions";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Typography } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./common.utils";
 
 function App(props) {

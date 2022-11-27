@@ -14,16 +14,11 @@ import { getWinRate, getPlayerDetailsColumnHeaders } from "../../common.utils";
 import SortableColumnHeader from "../../SortableColumnHeader/SortableColumnHeader";
 import { useState } from "react";
 import { SortType } from "../../common.utils";
-import { useEffect } from "react";
 function BasePlayerStatsTable(props) {
   const [sort, setSort] = useState({
     column: "actualMatchesPlayed",
     type: SortType.ASC,
   });
-
-  useEffect(() => {
-    // console.log(props);
-  }, [props]);
 
   const getColumnHeaders = () => {
     return getPlayerDetailsColumnHeaders().map((header, index) => {

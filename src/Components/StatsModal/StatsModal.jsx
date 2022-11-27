@@ -4,20 +4,7 @@ import { default as MUIModal } from "@mui/material/Modal";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useCallback } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  ThemeProvider,
-} from "@mui/material";
-import { theme } from "../../common.utils";
-import { SortType } from "../common.utils";
 import BasePlayerStatsTable from "../StatsTables/BasePlayerStatsTable/BasePlayerStatsTable";
-import Switch from "@mui/material/Switch";
 import TeammateOpponentToggle from "../TeammateOpponentToggle/TeammateOpponentToggle";
 import "./StatsModal.css";
 
@@ -43,41 +30,9 @@ function StatsModal(props) {
     setOpen(false);
     props.setRelativeStatsPlayer(null);
   };
-  const handleBlur = () => {
-    // setOpen(false);
-    props.setRelativeStatsPlayer(null);
-  };
 
   const initRelativePlayerStats = useCallback(() => {
     const pairingsCopy = JSON.parse(JSON.stringify(props.pairings));
-    console.log(pairingsCopy);
-
-    // setRelativeTeammateStats(
-    //   pairingsCopy
-    //     .filter((pairing) => pairing.players.includes(props.player.name))
-    //     .map((pairing) => {
-    //       const isPlayer1 = pairing.players[0] === props.player.name;
-    //       return {
-    //         name: pairing.players.find(
-    //           (player) => player !== props.player.name
-    //         ),
-    //         teammate: {
-    //           wins: pairing.teammates.wins,
-    //           losses: pairing.teammates.losses,
-    //           matchesPlayed: pairing.teammates.matchesPlayed,
-    //         },
-    //         opponent: {
-    //           wins: isPlayer1
-    //             ? pairing.opponents.player1WinsAndPlayer2Losses
-    //             : pairing.opponents.player2WinsAndPlayer1Losses,
-    //           losses: isPlayer1
-    //             ? pairing.opponents.player2WinsAndPlayer1Losses
-    //             : pairing.opponents.player1WinsAndPlayer2Losses,
-    //           matchesPlayed: pairing.opponents.matchesPlayed,
-    //         },
-    //       };
-    //     })
-    // );
 
     setTeammatePlayerStats(
       pairingsCopy
@@ -118,101 +73,6 @@ function StatsModal(props) {
     initRelativePlayerStats();
   }, [initRelativePlayerStats]);
 
-  // useEffect(() => {
-  //   console.log(relativePlayerStats);
-  // }, [relativePlayerStats]);
-
-  // useEffect(() => {
-  //   console.log(teammatePlayerStats);
-  // }, [teammatePlayerStats]);
-  // useEffect(() => {
-  //   console.log(opponentPlayerStats);
-  // }, [opponentPlayerStats]);
-
-  // const getTable = () => (
-  //   <div className="container">
-  //     <ThemeProvider theme={theme}>
-  //       <TableContainer component={Paper}>
-  //         <Table sx={{ minWidth: 150 }} aria-label="simple table">
-  //           <TableHead>
-  //             <TableRow>
-  //               <TableCell align="left" className="tableHeadCell">
-  //                 <div className="leftAlignedIconWrapper">
-  //                   <i
-  //                     onClick={() => handleSortButton("name")}
-  //                     className="fa-solid fa-user"
-  //                   ></i>
-  //                   {sort.column === "name" && sortIcons(true)}
-  //                 </div>
-  //               </TableCell>
-  //               <TableCell align="right" className="tableHeadCell">
-  //                 <i
-  //                   onClick={() => handleSortButton("wins")}
-  //                   className="fa-solid fa-w"
-  //                 ></i>
-  //                 {sort.column === "wins" && sortIcons(false)}
-  //               </TableCell>
-  //               <TableCell align="right" className="tableHeadCell">
-  //                 <i
-  //                   onClick={() => handleSortButton("losses")}
-  //                   className="fa-solid fa-l"
-  //                 ></i>
-  //                 {sort.column === "losses" && sortIcons(false)}
-  //               </TableCell>
-  //               <TableCell align="right" className="tableHeadCell">
-  //                 <i
-  //                   onClick={() => handleSortButton("actualMatchesPlayed")}
-  //                   className="fa-solid fa-hashtag"
-  //                 ></i>
-  //                 {sort.column === "actualMatchesPlayed" && sortIcons(false)}
-  //               </TableCell>
-  //               <TableCell align="right" className="tableHeadCell">
-  //                 <i
-  //                   onClick={() => handleSortButton("winRate")}
-  //                   className="fa-solid fa-percent"
-  //                 ></i>
-  //                 {sort.column === "winRate" && sortIcons(false)}
-  //               </TableCell>
-  //             </TableRow>
-  //           </TableHead>
-  //           <TableBody>
-  //             {relativeStats.map((player, key) => (
-  //               <TableRow key={key}>
-  //                 <TableCell align="left">{player.name}</TableCell>
-  //                 <TableCell align="right">{player.wins}</TableCell>
-  //                 <TableCell align="right">{player.losses}</TableCell>
-  //                 <TableCell align="right">
-  //                   {player.actualMatchesPlayed}
-  //                 </TableCell>
-  //                 <TableCell align="right">
-  //                   {getWinRate(player.wins, player.actualMatchesPlayed)}
-  //                 </TableCell>
-  //                 <TableCell align="center">
-  //                   <i
-  //                     onClick={() => handleFreezePlayerToggle(player)}
-  //                     className={
-  //                       (player.frozen ? "frozen " : "") +
-  //                       "fa-regular fa-snowflake icon"
-  //                     }
-  //                   ></i>
-
-  //                   <i
-  //                     onClick={() => handleRelativeStatsButton(player)}
-  //                     className={
-  //                       (relativeStatsPlayer === player ? "showStats " : "") +
-  //                       "fa-solid fa-chart-simple icon"
-  //                     }
-  //                   ></i>
-  //                 </TableCell>
-  //               </TableRow>
-  //             ))}
-  //           </TableBody>
-  //         </Table>
-  //       </TableContainer>
-  //     </ThemeProvider>
-  //   </div>
-  // );
-
   return (
     <div>
       <MUIModal
@@ -225,14 +85,7 @@ function StatsModal(props) {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {props.player.name}'s Relative Stats
           </Typography>
-          {/* {relativeStats.length > 0 && getTable()} */}
-          {/* <RelativePlayerStatsTable
-            relativePlayerStats={relativePlayerStats}
-            setRelativePlayerStats={setRelativePlayerStats}
-          ></RelativePlayerStatsTable> */}
 
-          {/* <span class="material-symbols-outlined">swords</span>
-          <span class="material-symbols-outlined">shield</span> */}
           <div className="teammate-opponent-toggle-container">
             <TeammateOpponentToggle
               setToggle={setToggle}
