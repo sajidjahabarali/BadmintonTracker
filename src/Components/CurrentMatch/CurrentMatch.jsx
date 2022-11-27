@@ -7,11 +7,12 @@ import {
   addLossToPlayer,
   updateRelativeStatsForPlayers,
 } from "../../redux/Players/players.actions";
-import { buttonTheme, shuffleArray } from "../../common.utils";
+import { shuffleArray } from "../../common.utils";
 import "./CurrentMatch.css";
 import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
 import { theme } from "../../common.utils";
+import { Typography } from "@mui/material";
 
 const LOCAL_STORAGE_KEY = "currentMatchState";
 
@@ -123,13 +124,13 @@ function CurrentMatch(props) {
   const getMatch = () => {
     return (
       <div className="matchInfo">
-        <div className="blueTeam">
+        <Typography variant="currentMatchName1">
           {currentPlayers[0].name} and {currentPlayers[1].name}
-        </div>
+        </Typography>
         <div className="team-divider">vs</div>
-        <div className="orangeTeam">
+        <Typography variant="currentMatchName2">
           {currentPlayers[2].name} and {currentPlayers[3].name}
-        </div>
+        </Typography>
       </div>
     );
   };
@@ -147,9 +148,10 @@ function CurrentMatch(props) {
           <div>
             <div className="button">
               <Button
-                style={buttonTheme}
+                // style={buttonTheme}
                 className="teamButton"
                 variant="contained"
+                type="matchButton"
                 color="blue"
                 onClick={() => {
                   createNextMatch("BLUE");
@@ -160,9 +162,9 @@ function CurrentMatch(props) {
             </div>
             <div className="button">
               <Button
-                style={buttonTheme}
                 className="teamButton"
                 variant="contained"
+                type="matchButton"
                 color="orange"
                 onClick={() => {
                   createNextMatch("ORANGE");
@@ -174,9 +176,9 @@ function CurrentMatch(props) {
           </div>
         ) : (
           <Button
-            style={buttonTheme}
+            type="matchButton"
             variant="contained"
-            color="white"
+            color="grey"
             onClick={() => {
               createNextMatch();
               setMatchesStarted(true);

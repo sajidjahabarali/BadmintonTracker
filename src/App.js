@@ -29,9 +29,7 @@ function App(props) {
           onClick={() => handleResetButton()}
           className="reset-button fa-solid fa-arrow-rotate-left"
         ></i>
-        <Typography variant="h1" color="blue">
-          Badminton Tracker
-        </Typography>
+        <Typography variant="h1">Badminton Tracker</Typography>
         <div className="container">
           <NameInput></NameInput>
           <TrackerInfo resetButtonPressed={resetButtonPressed}></TrackerInfo>

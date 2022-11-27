@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { orange, blue, white } from "@mui/material/colors";
+import { orange, blue, common, grey } from "@mui/material/colors";
 
 export const shuffleArray = (array) => {
   let currentIndex = array.length,
@@ -41,27 +41,53 @@ export function loadFromLocalStorage(name) {
   }
 }
 
+const appColors = {
+  white: common.white,
+  blue: blue[500],
+  orange: orange[500],
+  grey: grey[800],
+};
+
 export const theme = createTheme({
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { type: "matchButton" },
+          style: {
+            color: appColors.white,
+            fontSize: "25px",
+          },
+        },
+      ],
+    },
+  },
   typography: {
     fontFamily: "Bebas Neue, Arial, Helvetica, sans-serif",
     fontSize: 18,
     h1: {
       fontSize: 40,
+      color: appColors.grey,
+    },
+    currentMatchName1: {
+      color: appColors.blue,
+    },
+    currentMatchName2: {
+      color: appColors.orange,
     },
   },
   palette: {
     orange: {
-      main: orange[500],
+      main: appColors.orange,
     },
     blue: {
-      main: blue[500],
+      main: appColors.blue,
     },
     white: {
-      main: "white",
+      main: appColors.white,
+    },
+    grey: {
+      main: appColors.grey,
     },
   },
 });
-
-export const buttonTheme = {
-  fontSize: "25px",
-};
