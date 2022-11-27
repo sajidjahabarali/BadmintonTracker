@@ -7,7 +7,7 @@ import {
   addLossToPlayer,
   updateRelativeStatsForPlayers,
 } from "../../redux/Players/players.actions";
-import { shuffleArray } from "../../common.utils";
+import { shuffleArray, sortByTeammatePairings } from "../../common.utils";
 import "./CurrentMatch.css";
 import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
@@ -53,14 +53,24 @@ function CurrentMatch(props) {
     }
   }, [props.resetButtonPressed]);
 
+  // useEffect(() => {
+  //   console.log(props.playerDetails);
+  // }, [props]);
+
   useEffect(() => {
     if (props.playerDetails.length >= 4) {
-      const currentPlayersShuffled = shuffleArray(
-        props.playerDetails.slice(0, 4)
+      // const currentPlayersShuffled = shuffleArray(
+      //   props.playerDetails.slice(0, 4)
+      // );
+      // setCurrentPlayers(currentPlayersShuffled);
+      const currentPlayersSortedByTeammatePairings = sortByTeammatePairings(
+        props.playerDetails.slice(0, 4),
+        props.pairings
       );
-      setCurrentPlayers(currentPlayersShuffled);
+      setCurrentPlayers(currentPlayersSortedByTeammatePairings);
+      // setCurrentPlayers(props.playerDetails.slice(0, 4));
     }
-  }, [props.playerDetails]);
+  }, [props.pairings, props.playerDetails]);
 
   useEffect(() => {
     saveToLocalStorage(

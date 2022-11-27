@@ -6,7 +6,7 @@ import {
   TOGGLE_PLAYER_FROZEN,
   UPDATE_RELATIVE_STATS_FOR_PLAYERS,
 } from "./players.types";
-import { shuffleArray } from "../../common.utils";
+import { shuffleArray, sortByTeammatePairings } from "../../common.utils";
 
 const INITIAL_STATE = {
   playerDetails: [],
@@ -134,8 +134,9 @@ const reducer = (state = INITIAL_STATE, action) => {
       });
 
       newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
-        ? shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
-        : sortPlayers(playerDetailsCopy);
+        ? sortByTeammatePairings(playerDetailsCopy, pairingsCopy)
+        : //  shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
+          sortPlayers(playerDetailsCopy);
       break;
 
     case ADD_LOSS_TO_PLAYER:
@@ -148,8 +149,9 @@ const reducer = (state = INITIAL_STATE, action) => {
       });
 
       newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
-        ? shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
-        : sortPlayers(playerDetailsCopy);
+        ? sortByTeammatePairings(playerDetailsCopy, pairingsCopy)
+        : // shuffleArray(playerDetailsCopy).sort((a, b) => sortByFrozen(a, b))
+          sortPlayers(playerDetailsCopy);
       break;
 
     case UPDATE_RELATIVE_STATS_FOR_PLAYERS:
