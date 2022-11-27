@@ -36,7 +36,7 @@ export default function SortableColumnHeader(props) {
         }
         className={props.iconClassName}
       ></i>
-      {props.sort.column === props.column && sortIcons(true)}
+      {props.sort.column === props.column && sortIcons(props.align === "left")}
     </div>
   );
 }
