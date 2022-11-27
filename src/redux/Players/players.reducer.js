@@ -51,24 +51,11 @@ const equalMatchesForAllPlayers = (players) => {
   return true;
 };
 
-// const updateRelativeStats = (playersCopy) => {
-//   const newRelativeStats = playersCopy.map((player) => {
-//     return playersCopy
-//       .filter((relativePlayer) => relativePlayer.name !== player.name)
-//       .reduce((previousResult, relativePlayer) => {
-//         return { ...player, relativeStats: { teammates: [], opponents: [] } };
-//       });
-//   });
-
-//   return { teammates: newRelativeStats, opponents: newRelativeStats };
-// };
-
 const updatePairingsForNewPlayer = (
   newPlayerName,
   existingPlayers,
   pairingsCopy
 ) => {
-  // console.log(newPlayerName, existingPlayers);
   for (let existingPlayerKey in existingPlayers) {
     pairingsCopy.push({
       players: [newPlayerName, existingPlayers[existingPlayerKey].name],
@@ -89,9 +76,6 @@ const updatePairingsForNewPlayer = (
 };
 
 const pairingMatches = (pairing, players) => {
-  // return players.reduce((previousValue, currentPlayer) => {
-  //   return previousValue && pairing.players.includes(currentPlayer);
-  // }, true);
   for (let playerKey in players) {
     if (!pairing.includes(players[playerKey])) return false;
   }
@@ -225,19 +209,6 @@ const reducer = (state = INITIAL_STATE, action) => {
 
         if (JSON.stringify(newPairing) !== JSON.stringify(pairing))
           return newPairing;
-
-        // console.log(newPairing);
-        // if (
-        //   newPairing.players.reduce((previousValue, currentPlayer) => {
-        //     return (
-        //       previousValue &&
-        //       (winningTeamPlayers.includes(currentPlayer) ||
-        //         losingTeamPlayers.includes(currentPlayer))
-        //     );
-        //   }, true)
-        // ) {
-        //   console.log("opponents: ", newPairing);
-        // }
 
         newPairing = newPairing.players.reduce(
           (previousValue, currentPlayer) => {
