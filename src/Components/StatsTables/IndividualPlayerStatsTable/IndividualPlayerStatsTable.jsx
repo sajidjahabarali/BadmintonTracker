@@ -48,13 +48,9 @@ function IndividualPlayerStatsTable(props) {
   const getColumnHeaders = () => {
     return (
       <TableRow>
-        {getPlayerDetailsColumnHeaders().map((header, index) => {
+        {getPlayerDetailsColumnHeaders().map((header, key) => {
           return (
-            <TableCell
-              key={index}
-              align={header.align}
-              className="tableHeadCell"
-            >
+            <TableCell key={key} align={header.align} className="tableHeadCell">
               <SortableColumnHeader
                 align={header.align}
                 data={playersCopy}
@@ -74,9 +70,10 @@ function IndividualPlayerStatsTable(props) {
     );
   };
 
-  const getPlayerOptionsButtons = (player) => {
+  const getPlayerOptionsButtons = (player, index) => {
     return [
       <i
+        key={"freeze" + index}
         onClick={() => handleFreezePlayerToggle(player)}
         className={
           (player.frozen ? "frozen " : "") + "fa-regular fa-snowflake icon"
@@ -84,6 +81,7 @@ function IndividualPlayerStatsTable(props) {
       ></i>,
 
       <i
+        key={"stats" + index}
         onClick={() => handleRelativeStatsButton(player)}
         className={
           (relativeStatsPlayer === player ? "showStats " : "") +
@@ -97,53 +95,10 @@ function IndividualPlayerStatsTable(props) {
     {
       align: "center",
       headerIconClassName: "gear",
-      getTableBodyCellContent: (player) => getPlayerOptionsButtons(player),
+      getTableBodyCellContent: (player, index) =>
+        getPlayerOptionsButtons(player, index),
     },
   ];
-
-  const getTable = () => (
-    <div className="container">
-      <ThemeProvider theme={theme}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 150 }} aria-label="simple table">
-            <TableHead>{getColumnHeaders()}</TableHead>
-            <TableBody>
-              {playersCopy.map((player, key) => (
-                <TableRow key={key}>
-                  <TableCell align="left">{player.name}</TableCell>
-                  <TableCell align="right">{player.wins}</TableCell>
-                  <TableCell align="right">{player.losses}</TableCell>
-                  <TableCell align="right">
-                    {player.actualMatchesPlayed}
-                  </TableCell>
-                  <TableCell align="right">
-                    {getWinRate(player.wins, player.actualMatchesPlayed)}
-                  </TableCell>
-                  <TableCell align="center">
-                    <i
-                      onClick={() => handleFreezePlayerToggle(player)}
-                      className={
-                        (player.frozen ? "frozen " : "") +
-                        "fa-regular fa-snowflake icon"
-                      }
-                    ></i>
-
-                    <i
-                      onClick={() => handleRelativeStatsButton(player)}
-                      className={
-                        (relativeStatsPlayer === player ? "showStats " : "") +
-                        "fa-solid fa-chart-simple icon"
-                      }
-                    ></i>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </ThemeProvider>
-    </div>
-  );
 
   return (
     playersCopy.length > 0 && (
@@ -158,8 +113,6 @@ function IndividualPlayerStatsTable(props) {
         <BasePlayerStatsTable
           data={playersCopy}
           setData={setPlayersCopy}
-          sort={sort}
-          setSort={setSort}
           additionalColumns={getAdditionalColumns()}
         ></BasePlayerStatsTable>
       </div>
@@ -170,7 +123,6 @@ function IndividualPlayerStatsTable(props) {
 const mapStateToProps = (state) => {
   return {
     playerDetails: state.players.playerDetails ?? [],
-    pairings: state.players.pairings ?? [],
   };
 };
 

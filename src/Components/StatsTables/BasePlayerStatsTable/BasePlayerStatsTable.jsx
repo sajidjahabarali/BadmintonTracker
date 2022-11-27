@@ -12,12 +12,18 @@ import {
 import { theme } from "../../../common.utils";
 import { getWinRate, getPlayerDetailsColumnHeaders } from "../../common.utils";
 import SortableColumnHeader from "../../SortableColumnHeader/SortableColumnHeader";
+import { useState } from "react";
+import { SortType } from "../../common.utils";
 import { useEffect } from "react";
-
 function BasePlayerStatsTable(props) {
+  const [sort, setSort] = useState({
+    column: "actualMatchesPlayed",
+    type: SortType.ASC,
+  });
+
   useEffect(() => {
-    console.log(props.additionalColumns);
-  }, [props.additionalColumns]);
+    // console.log(props);
+  }, [props]);
 
   const getColumnHeaders = () => {
     return getPlayerDetailsColumnHeaders().map((header, index) => {
@@ -28,14 +34,15 @@ function BasePlayerStatsTable(props) {
             data={props.data}
             setData={props.setData}
             column={header.column}
-            sort={props.sort}
-            setSort={props.setSort}
+            sort={sort}
+            setSort={setSort}
             iconClassName={"fa-solid fa-" + header.iconClassName ?? ""}
           ></SortableColumnHeader>
         </TableCell>
       );
     });
   };
+
   return (
     <div className="container">
       <ThemeProvider theme={theme}>
@@ -44,14 +51,16 @@ function BasePlayerStatsTable(props) {
             <TableHead>
               <TableRow>
                 {getColumnHeaders()}
-                {props.additionalColumns.length > 0
-                  ? props.additionalColumns.map((column) => {
+                {props.additionalColumns !== undefined
+                  ? props.additionalColumns.map((column, index) => {
                       return (
                         <TableCell
+                          key={index}
                           align={column.align}
                           className="tableHeadCell"
                         >
                           <i
+                            key={index}
                             className={
                               "fa-solid fa-" + column.headerIconClassName
                             }
@@ -63,8 +72,8 @@ function BasePlayerStatsTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {props.data.map((player, key) => (
-                <TableRow key={key}>
+              {props.data.map((player, index) => (
+                <TableRow key={index}>
                   <TableCell align="left">{player.name}</TableCell>
                   <TableCell align="right">{player.wins}</TableCell>
                   <TableCell align="right">{player.losses}</TableCell>
@@ -74,11 +83,11 @@ function BasePlayerStatsTable(props) {
                   <TableCell align="right">
                     {getWinRate(player.wins, player.actualMatchesPlayed)}
                   </TableCell>
-                  {props.additionalColumns.length > 0
-                    ? props.additionalColumns.map((column) => {
+                  {props.additionalColumns !== undefined
+                    ? props.additionalColumns.map((column, index) => {
                         return (
-                          <TableCell align={column.align}>
-                            {column.getTableBodyCellContent(player)}
+                          <TableCell key={index} align={column.align}>
+                            {column.getTableBodyCellContent(player, index)}
                           </TableCell>
                         );
                       })

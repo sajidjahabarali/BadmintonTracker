@@ -16,50 +16,118 @@ import {
 } from "@mui/material";
 import { theme } from "../../common.utils";
 import { SortType } from "../common.utils";
+import BasePlayerStatsTable from "../StatsTables/BasePlayerStatsTable/BasePlayerStatsTable";
+import Switch from "@mui/material/Switch";
+import TeammateOpponentToggle from "../TeammateOpponentToggle/TeammateOpponentToggle";
+import "./StatsModal.css";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "70%",
+  width: "85%",
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
-  p: 4,
+  p: 2,
 };
 
 function StatsModal(props) {
   const [open, setOpen] = useState(true);
-  const [relativeStats, setRelativeStats] = useState([]);
-  const [sort, setSort] = useState({
-    column: "actualMatchesPlayed",
-    type: SortType.ASC,
-  });
+  const [teammatePlayerStats, setTeammatePlayerStats] = useState([]);
+  const [opponentPlayerStats, setOpponentPlayerStats] = useState([]);
+  const [toggle, setToggle] = useState(false);
 
-  const handleClose = () => setOpen(false);
-  const handleBlur = () => {
+  const handleClose = () => {
     setOpen(false);
     props.setRelativeStatsPlayer(null);
   };
+  const handleBlur = () => {
+    // setOpen(false);
+    props.setRelativeStatsPlayer(null);
+  };
 
-  const initRelativeStats = useCallback(() => {
+  const initRelativePlayerStats = useCallback(() => {
     const pairingsCopy = JSON.parse(JSON.stringify(props.pairings));
+    console.log(pairingsCopy);
 
-    setRelativeStats(
-      pairingsCopy.filter((pairing) =>
-        pairing.players.includes(props.player.name)
-      )
+    // setRelativeTeammateStats(
+    //   pairingsCopy
+    //     .filter((pairing) => pairing.players.includes(props.player.name))
+    //     .map((pairing) => {
+    //       const isPlayer1 = pairing.players[0] === props.player.name;
+    //       return {
+    //         name: pairing.players.find(
+    //           (player) => player !== props.player.name
+    //         ),
+    //         teammate: {
+    //           wins: pairing.teammates.wins,
+    //           losses: pairing.teammates.losses,
+    //           matchesPlayed: pairing.teammates.matchesPlayed,
+    //         },
+    //         opponent: {
+    //           wins: isPlayer1
+    //             ? pairing.opponents.player1WinsAndPlayer2Losses
+    //             : pairing.opponents.player2WinsAndPlayer1Losses,
+    //           losses: isPlayer1
+    //             ? pairing.opponents.player2WinsAndPlayer1Losses
+    //             : pairing.opponents.player1WinsAndPlayer2Losses,
+    //           matchesPlayed: pairing.opponents.matchesPlayed,
+    //         },
+    //       };
+    //     })
+    // );
+
+    setTeammatePlayerStats(
+      pairingsCopy
+        .filter((pairing) => pairing.players.includes(props.player.name))
+        .map((pairing) => {
+          return {
+            name: pairing.players.find(
+              (player) => player !== props.player.name
+            ),
+            wins: pairing.teammates.wins,
+            losses: pairing.teammates.losses,
+            actualMatchesPlayed: pairing.teammates.matchesPlayed,
+          };
+        })
     );
-  }, [props.pairings, props.player.name]);
+    setOpponentPlayerStats(
+      pairingsCopy
+        .filter((pairing) => pairing.players.includes(props.player.name))
+        .map((pairing) => {
+          const isPlayer1 = pairing.players[0] === props.player.name;
+          return {
+            name: pairing.players.find(
+              (player) => player !== props.player.name
+            ),
+            wins: isPlayer1
+              ? pairing.opponents.player1WinsAndPlayer2Losses
+              : pairing.opponents.player2WinsAndPlayer1Losses,
+            losses: isPlayer1
+              ? pairing.opponents.player2WinsAndPlayer1Losses
+              : pairing.opponents.player1WinsAndPlayer2Losses,
+            actualMatchesPlayed: pairing.opponents.matchesPlayed,
+          };
+        })
+    );
+  }, [props.pairings, props.player]);
 
   useEffect(() => {
-    initRelativeStats();
-  }, [initRelativeStats]);
+    initRelativePlayerStats();
+  }, [initRelativePlayerStats]);
 
-  useEffect(() => {
-    console.log(relativeStats);
-  }, [relativeStats]);
+  // useEffect(() => {
+  //   console.log(relativePlayerStats);
+  // }, [relativePlayerStats]);
+
+  // useEffect(() => {
+  //   console.log(teammatePlayerStats);
+  // }, [teammatePlayerStats]);
+  // useEffect(() => {
+  //   console.log(opponentPlayerStats);
+  // }, [opponentPlayerStats]);
 
   // const getTable = () => (
   //   <div className="container">
@@ -144,12 +212,12 @@ function StatsModal(props) {
   //     </ThemeProvider>
   //   </div>
   // );
+
   return (
     <div>
       <MUIModal
         open={open}
         onClose={handleClose}
-        onBlur={() => handleBlur()}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -158,6 +226,33 @@ function StatsModal(props) {
             {props.player.name}'s Relative Stats
           </Typography>
           {/* {relativeStats.length > 0 && getTable()} */}
+          {/* <RelativePlayerStatsTable
+            relativePlayerStats={relativePlayerStats}
+            setRelativePlayerStats={setRelativePlayerStats}
+          ></RelativePlayerStatsTable> */}
+
+          {/* <span class="material-symbols-outlined">swords</span>
+          <span class="material-symbols-outlined">shield</span> */}
+          <div className="teammate-opponent-toggle-container">
+            <TeammateOpponentToggle
+              setToggle={setToggle}
+            ></TeammateOpponentToggle>
+          </div>
+
+          {/* <Switch /> */}
+          {toggle
+            ? opponentPlayerStats.length > 0 && (
+                <BasePlayerStatsTable
+                  data={opponentPlayerStats}
+                  setData={setOpponentPlayerStats}
+                ></BasePlayerStatsTable>
+              )
+            : teammatePlayerStats.length > 0 && (
+                <BasePlayerStatsTable
+                  data={teammatePlayerStats}
+                  setData={setTeammatePlayerStats}
+                ></BasePlayerStatsTable>
+              )}
         </Box>
       </MUIModal>
     </div>
@@ -166,7 +261,6 @@ function StatsModal(props) {
 
 const mapStateToProps = (state) => {
   return {
-    playerDetails: state.players.playerDetails ?? [],
     pairings: state.players.pairings ?? [],
   };
 };
