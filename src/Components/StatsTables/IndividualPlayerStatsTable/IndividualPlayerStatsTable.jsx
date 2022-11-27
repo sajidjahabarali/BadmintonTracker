@@ -1,26 +1,9 @@
 import { connect } from "react-redux";
 import { togglePlayerFrozen } from "../../../redux/Players/players.actions";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  ThemeProvider,
-} from "@mui/material";
 import StatsModal from "../../StatsModal/StatsModal";
 import { useState } from "react";
-import { theme } from "../../../common.utils";
 import "./IndividualPlayerStatsTable.css";
 import { useEffect } from "react";
-import {
-  SortType,
-  getWinRate,
-  getPlayerDetailsColumnHeaders,
-} from "../../common.utils";
-import SortableColumnHeader from "../../SortableColumnHeader/SortableColumnHeader";
 import BasePlayerStatsTable from "../BasePlayerStatsTable/BasePlayerStatsTable";
 
 function IndividualPlayerStatsTable(props) {
@@ -28,10 +11,6 @@ function IndividualPlayerStatsTable(props) {
   const [playersCopy, setPlayersCopy] = useState(
     JSON.parse(JSON.stringify(props.playerDetails))
   );
-  const [sort, setSort] = useState({
-    column: "actualMatchesPlayed",
-    type: SortType.ASC,
-  });
 
   useEffect(() => {
     setPlayersCopy(JSON.parse(JSON.stringify(props.playerDetails)));
@@ -43,31 +22,6 @@ function IndividualPlayerStatsTable(props) {
 
   const handleRelativeStatsButton = (player) => {
     setRelativeStatsPlayer(player);
-  };
-
-  const getColumnHeaders = () => {
-    return (
-      <TableRow>
-        {getPlayerDetailsColumnHeaders().map((header, key) => {
-          return (
-            <TableCell key={key} align={header.align} className="tableHeadCell">
-              <SortableColumnHeader
-                align={header.align}
-                data={playersCopy}
-                setData={setPlayersCopy}
-                column={header.column}
-                sort={sort}
-                setSort={setSort}
-                iconClassName={"fa-solid fa-" + header.iconClassName ?? ""}
-              ></SortableColumnHeader>
-            </TableCell>
-          );
-        })}
-        <TableCell align="center" className="tableHeadCell">
-          <i className="fa-solid fa-gear"></i>
-        </TableCell>
-      </TableRow>
-    );
   };
 
   const getPlayerOptionsButtons = (player, index) => {
@@ -109,7 +63,7 @@ function IndividualPlayerStatsTable(props) {
             player={relativeStatsPlayer}
           ></StatsModal>
         ) : null}
-        {/* {getTable()} */}
+
         <BasePlayerStatsTable
           data={playersCopy}
           setData={setPlayersCopy}

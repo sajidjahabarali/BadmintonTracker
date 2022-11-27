@@ -1,9 +1,7 @@
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import "./TeammateOpponentToggle.css";
-import { useState, useEffect } from "react";
 
 const MaterialUISwitch = styled(Switch)(() => ({
   width: 62,

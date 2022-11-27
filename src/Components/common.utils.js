@@ -1,16 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  ThemeProvider,
-} from "@mui/material";
-
-import SortableColumnHeader from "./SortableColumnHeader/SortableColumnHeader";
-
 export const SortType = {
   ASC: "ASC",
   DESC: "DESC",
