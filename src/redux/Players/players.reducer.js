@@ -75,25 +75,11 @@ const updatePairingsForNewPlayer = (
   return pairingsCopy;
 };
 
-const pairingMatches = (pairing, players) => {
-  for (let playerKey in players) {
-    if (!pairing.includes(players[playerKey])) return false;
-  }
-  return true;
-};
-
 const createStateSliceCopy = (slice) => {
   return slice.map((currentPlayerDetail) =>
     JSON.parse(JSON.stringify(currentPlayerDetail))
   );
 };
-
-const teammatePairing = (pairing, { player, teammate }) =>
-  pairingMatches(pairing.players, [player, teammate]);
-
-const opponentPairing = (pairing, { player, opponents }) =>
-  pairingMatches(pairing.players, [player, opponents[0]]) ||
-  pairingMatches(pairing.players, [player, opponents[1]]);
 
 const reducer = (state = INITIAL_STATE, action) => {
   let playerDetailsCopy = createStateSliceCopy(state.playerDetails);
