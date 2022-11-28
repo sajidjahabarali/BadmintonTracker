@@ -79,6 +79,13 @@ export const theme = createTheme({
         },
       ],
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: "12px 12px",
+        },
+      },
+    },
   },
   typography: {
     fontFamily: "Bebas Neue, Arial, Helvetica, sans-serif",
