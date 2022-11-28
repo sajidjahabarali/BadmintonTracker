@@ -63,11 +63,13 @@ const updatePairingsForNewPlayer = (
         wins: 0,
         losses: 0,
         matchesPlayed: 0,
+        streak: 0,
       },
       opponents: {
         player1WinsAndPlayer2Losses: 0,
         player2WinsAndPlayer1Losses: 0,
         matchesPlayed: 0,
+        player1WinStreakAndPlayer2LossStreak: 0,
       },
     });
   }
@@ -100,6 +102,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           playerDetailsCopy.length > 0
             ? playerDetailsCopy[0].matchMakingMatchesPlayed
             : 0,
+        streak: 0,
         frozen: false,
       });
 
@@ -130,6 +133,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           player.wins++;
           player.actualMatchesPlayed++;
           player.matchMakingMatchesPlayed++;
+          player.streak = player.streak > -1 ? player.streak + 1 : 1;
         }
       });
 
@@ -144,6 +148,7 @@ const reducer = (state = INITIAL_STATE, action) => {
           player.losses++;
           player.actualMatchesPlayed++;
           player.matchMakingMatchesPlayed++;
+          player.streak = player.streak < 1 ? player.streak - 1 : -1;
         }
       });
 
@@ -168,6 +173,10 @@ const reducer = (state = INITIAL_STATE, action) => {
                 wins: newPairing.teammates.wins + 1,
                 losses: newPairing.teammates.losses,
                 matchesPlayed: newPairing.teammates.matchesPlayed + 1,
+                streak:
+                  newPairing.teammates.streak > -1
+                    ? newPairing.teammates.streak + 1
+                    : 1,
               },
               opponents: newPairing.opponents,
             }
@@ -188,6 +197,10 @@ const reducer = (state = INITIAL_STATE, action) => {
                 wins: newPairing.teammates.wins,
                 losses: newPairing.teammates.losses + 1,
                 matchesPlayed: newPairing.teammates.matchesPlayed + 1,
+                streak:
+                  newPairing.teammates.streak < 1
+                    ? newPairing.teammates.streak - 1
+                    : -1,
               },
               opponents: newPairing.opponents,
             }
@@ -216,6 +229,12 @@ const reducer = (state = INITIAL_STATE, action) => {
                   player2WinsAndPlayer1Losses:
                     newPairing.opponents.player2WinsAndPlayer1Losses,
                   matchesPlayed: newPairing.opponents.matchesPlayed + 1,
+                  player1WinStreakAndPlayer2LossStreak:
+                    newPairing.opponents.player1WinStreakAndPlayer2LossStreak >
+                    -1
+                      ? newPairing.opponents
+                          .player1WinStreakAndPlayer2LossStreak + 1
+                      : 1,
                 },
               }
             : {
@@ -227,6 +246,12 @@ const reducer = (state = INITIAL_STATE, action) => {
                   player2WinsAndPlayer1Losses:
                     newPairing.opponents.player2WinsAndPlayer1Losses + 1,
                   matchesPlayed: newPairing.opponents.matchesPlayed + 1,
+                  player1WinStreakAndPlayer2LossStreak:
+                    newPairing.opponents.player1WinStreakAndPlayer2LossStreak <
+                    1
+                      ? newPairing.opponents
+                          .player1WinStreakAndPlayer2LossStreak - 1
+                      : -1,
                 },
               }
           : newPairing;

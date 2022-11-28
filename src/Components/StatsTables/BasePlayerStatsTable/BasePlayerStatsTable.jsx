@@ -31,7 +31,7 @@ function BasePlayerStatsTable(props) {
             column={header.column}
             sort={sort}
             setSort={setSort}
-            iconClassName={"fa-solid fa-" + header.iconClassName ?? ""}
+            iconClassName={header.iconClassName}
           ></SortableColumnHeader>
         </TableCell>
       );
@@ -77,6 +77,9 @@ function BasePlayerStatsTable(props) {
                   </TableCell>
                   <TableCell align="right">
                     {getWinRate(player.wins, player.actualMatchesPlayed)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {(player.streak > 0 ? "+" : "") + player.streak}
                   </TableCell>
                   {props.additionalColumns !== undefined
                     ? props.additionalColumns.map((column, index) => {

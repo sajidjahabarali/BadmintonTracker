@@ -76,9 +76,10 @@ const bothPlayerWinRatesExist = (player1, player2) => {
 };
 
 export const getPlayerDetailsColumnHeaders = () => [
-  { align: "left", column: "name", iconClassName: "user" },
-  { align: "right", column: "wins", iconClassName: "w" },
-  { align: "right", column: "losses", iconClassName: "l" },
-  { align: "right", column: "actualMatchesPlayed", iconClassName: "hashtag" },
-  { align: "right", column: "winRate", iconClassName: "percent" },
+  { align: "left", column: "name", iconClassName: ["user"] },
+  { align: "right", column: "wins", iconClassName: ["w"] },
+  { align: "right", column: "losses", iconClassName: ["l"] },
+  { align: "right", column: "actualMatchesPlayed", iconClassName: ["hashtag"] },
+  { align: "right", column: "winRate", iconClassName: ["percent"] },
+  { align: "right", column: "streak", iconClassName: ["plus", "minus"] },
 ];

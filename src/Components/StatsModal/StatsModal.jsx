@@ -45,6 +45,7 @@ function StatsModal(props) {
             wins: pairing.teammates.wins,
             losses: pairing.teammates.losses,
             actualMatchesPlayed: pairing.teammates.matchesPlayed,
+            streak: pairing.teammates.streak,
           };
         })
     );
@@ -64,6 +65,9 @@ function StatsModal(props) {
               ? pairing.opponents.player2WinsAndPlayer1Losses
               : pairing.opponents.player1WinsAndPlayer2Losses,
             actualMatchesPlayed: pairing.opponents.matchesPlayed,
+            streak: isPlayer1
+              ? pairing.opponents.player1WinStreakAndPlayer2LossStreak
+              : 0 - pairing.opponents.player1WinStreakAndPlayer2LossStreak,
           };
         })
     );
@@ -92,7 +96,6 @@ function StatsModal(props) {
             ></TeammateOpponentToggle>
           </div>
 
-          {/* <Switch /> */}
           {toggle
             ? opponentPlayerStats.length > 0 && (
                 <BasePlayerStatsTable

@@ -23,19 +23,29 @@ export default function SortableColumnHeader(props) {
   );
 
   return (
-    <div className={props.align === "left" ? "leftAlignedIconWrapper" : ""}>
-      <i
-        onClick={() =>
-          handleSortButton(
-            props.data,
-            props.setData,
-            props.column,
-            props.sort,
-            props.setSort
-          )
-        }
-        className={props.iconClassName}
-      ></i>
+    <div
+      className={
+        props.align === "left" ? "leftAlignedIconWrapper" : "" + " iconWrapper"
+      }
+    >
+      {props.iconClassName.map((iconClassName, index) => {
+        return (
+          <div key={index}>
+            <i
+              onClick={() =>
+                handleSortButton(
+                  props.data,
+                  props.setData,
+                  props.column,
+                  props.sort,
+                  props.setSort
+                )
+              }
+              className={"fa-solid fa-" + iconClassName}
+            ></i>
+          </div>
+        );
+      })}
       {props.sort.column === props.column && sortIcons(props.align === "left")}
     </div>
   );
