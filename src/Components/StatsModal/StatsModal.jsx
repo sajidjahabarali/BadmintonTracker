@@ -79,18 +79,21 @@ function StatsModal(props) {
   }, [initRelativePlayerStats]);
 
   return (
-    <div>
-      <MUIModal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
+    <MUIModal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <div
+          id={
+            (toggle ? "OpponentStats-" : "TeammateStats-") + props.player.name
+          }
+        >
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {props.player.name}'s Relative Stats
           </Typography>
-
           <div className="teammate-opponent-toggle-container">
             <TeammateOpponentToggle
               setToggle={setToggle}
@@ -102,17 +105,27 @@ function StatsModal(props) {
                 <BasePlayerStatsTable
                   data={opponentPlayerStats}
                   setData={setOpponentPlayerStats}
+                  relativePlayer={props.player.name}
+                  tableName={"OpponentTable-" + props.player.name}
+                  saveImagesButtons={{
+                    elementId: "OpponentStats-" + props.player.name,
+                  }}
                 ></BasePlayerStatsTable>
               )
             : teammatePlayerStats.length > 0 && (
                 <BasePlayerStatsTable
                   data={teammatePlayerStats}
                   setData={setTeammatePlayerStats}
+                  relativePlayer={props.player.name}
+                  tableName={"TeammateTable-" + props.player.name}
+                  saveImagesButtons={{
+                    elementId: "TeammateStats-" + props.player.name,
+                  }}
                 ></BasePlayerStatsTable>
               )}
-        </Box>
-      </MUIModal>
-    </div>
+        </div>
+      </Box>
+    </MUIModal>
   );
 }
 

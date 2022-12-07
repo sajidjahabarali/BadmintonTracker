@@ -1,0 +1,16 @@
+
+.tableContainer{
+  position: relative;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+}
+
+.saveTableIcon {
+  font-size: 20px;
+  margin: 5px;
+}
+
+.saveTableButtons {
+  position: absolute;
+  right:0;
+}

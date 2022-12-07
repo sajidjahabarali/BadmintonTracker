@@ -64,11 +64,22 @@ function IndividualPlayerStatsTable(props) {
             player={relativeStatsPlayer}
           ></StatsModal>
         ) : null}
-
         <BasePlayerStatsTable
           data={playersCopy}
           setData={setPlayersCopy}
           additionalColumns={getAdditionalColumns()}
+          tableName={"individualPlayerStatsTable"}
+          saveImagesButtons={{
+            elementId: "individualPlayerStatsTable",
+            // individualPlayerStatsTable: {
+            //   iconName: "image",
+            //   tableName: ["individualPlayerStatsTable"],
+            // },
+            // relativePlayerStatsTables: {
+            //   iconName: "images",
+            //   tableName: ["individualPlayerStatsTable"],
+            // },
+          }}
         ></BasePlayerStatsTable>
       </div>
     )
