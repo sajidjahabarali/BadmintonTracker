@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import BasePlayerStatsTable from "../StatsTables/BasePlayerStatsTable/BasePlayerStatsTable";
 import TeammateOpponentToggle from "../TeammateOpponentToggle/TeammateOpponentToggle";
 import "./StatsModal.css";
+import { createShallowCopy } from "../../common.utils";
 
 const style = {
   position: "absolute",
@@ -32,7 +33,7 @@ function StatsModal(props) {
   };
 
   const initRelativePlayerStats = useCallback(() => {
-    const pairingsCopy = JSON.parse(JSON.stringify(props.pairings));
+    const pairingsCopy = createShallowCopy(props.pairings);
 
     setTeammatePlayerStats(
       pairingsCopy

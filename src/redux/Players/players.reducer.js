@@ -6,7 +6,8 @@ import {
   TOGGLE_PLAYER_FROZEN,
   UPDATE_RELATIVE_STATS_FOR_PLAYERS,
 } from "./players.types";
-import { sortByTeammatePairings } from "../../common.utils";
+import { sortByTeammatePairings, createShallowCopy } from "../../common.utils";
+import { matchMakingMetricsLogs } from "../../testing.utils";
 
 const INITIAL_STATE = {
   playerDetails: [],
@@ -27,7 +28,7 @@ const sortByFrozen = (player1, player2) => {
   else return 0;
 };
 
-const sortPlayers = (players) => {
+const sortPlayersByMatchesAndFrozen = (players) => {
   const playersSortedByMatches = players.sort((player1, player2) =>
     sortByMatches(player1, player2)
   );
@@ -79,7 +80,7 @@ const updatePairingsForNewPlayer = (
 
 const createStateSliceCopy = (slice) => {
   return slice.map((currentPlayerDetail) =>
-    JSON.parse(JSON.stringify(currentPlayerDetail))
+    createShallowCopy(currentPlayerDetail)
   );
 };
 
@@ -112,7 +113,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         [...pairingsCopy]
       );
 
-      newPlayerDetailsState = sortPlayers(playerDetailsCopy);
+      newPlayerDetailsState = sortPlayersByMatchesAndFrozen(playerDetailsCopy);
       break;
 
     case TOGGLE_PLAYER_FROZEN:
@@ -124,7 +125,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         }
       });
 
-      newPlayerDetailsState = sortPlayers(playerDetailsCopy);
+      newPlayerDetailsState = sortPlayersByMatchesAndFrozen(playerDetailsCopy);
       break;
 
     case ADD_WIN_TO_PLAYER:
@@ -139,7 +140,7 @@ const reducer = (state = INITIAL_STATE, action) => {
 
       newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
         ? sortByTeammatePairings(playerDetailsCopy, pairingsCopy)
-        : sortPlayers(playerDetailsCopy);
+        : sortPlayersByMatchesAndFrozen(playerDetailsCopy);
       break;
 
     case ADD_LOSS_TO_PLAYER:
@@ -154,13 +155,13 @@ const reducer = (state = INITIAL_STATE, action) => {
 
       newPlayerDetailsState = equalMatchesForAllPlayers(playerDetailsCopy)
         ? sortByTeammatePairings(playerDetailsCopy, pairingsCopy)
-        : sortPlayers(playerDetailsCopy);
+        : sortPlayersByMatchesAndFrozen(playerDetailsCopy);
       break;
 
     case UPDATE_RELATIVE_STATS_FOR_PLAYERS:
       const { winningTeamPlayers, losingTeamPlayers } = action.payload;
       newPairingsState = pairingsCopy.map((pairing) => {
-        let newPairing = JSON.parse(JSON.stringify(pairing));
+        let newPairing = createShallowCopy(pairing);
         newPairing = winningTeamPlayers.reduce(
           (previousValue, currentPlayer) => {
             return previousValue && newPairing.players.includes(currentPlayer);
@@ -264,11 +265,14 @@ const reducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 
-  if (newPairingsState.length === 0) {
-    newPairingsState = pairingsCopy;
-  }
   if (newPlayerDetailsState.length === 0) {
     newPlayerDetailsState = playerDetailsCopy;
+  }
+
+  if (newPairingsState.length === 0) {
+    newPairingsState = pairingsCopy;
+  } else {
+    matchMakingMetricsLogs(newPlayerDetailsState, newPairingsState);
   }
 
   return {

@@ -5,15 +5,16 @@ import { useState } from "react";
 import "./IndividualPlayerStatsTable.css";
 import { useEffect } from "react";
 import BasePlayerStatsTable from "../BasePlayerStatsTable/BasePlayerStatsTable";
+import { createShallowCopy } from "../../../common.utils";
 
 function IndividualPlayerStatsTable(props) {
   const [relativeStatsPlayer, setRelativeStatsPlayer] = useState(null);
   const [playersCopy, setPlayersCopy] = useState(
-    JSON.parse(JSON.stringify(props.playerDetails))
+    createShallowCopy(props.playerDetails)
   );
 
   useEffect(() => {
-    setPlayersCopy(JSON.parse(JSON.stringify(props.playerDetails)));
+    setPlayersCopy(createShallowCopy(props.playerDetails));
   }, [props.playerDetails]);
 
   const handleFreezePlayerToggle = (player) => {
