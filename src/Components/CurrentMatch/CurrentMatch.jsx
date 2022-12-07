@@ -13,6 +13,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { saveToLocalStorage, loadFromLocalStorage } from "../../common.utils";
 import { theme } from "../../common.utils";
 import { Typography } from "@mui/material";
+import JSConfetti from "js-confetti";
 
 const LOCAL_STORAGE_KEY = "currentMatchState";
 
@@ -44,6 +45,7 @@ function CurrentMatch(props) {
   const [matchesPlayed, setMatchesPlayed] = useState(
     getMatchesPlayedDefaultState()
   );
+  const jsConfetti = new JSConfetti();
 
   useEffect(() => {
     if (props.resetButtonPressed) {
@@ -87,6 +89,9 @@ function CurrentMatch(props) {
         props.addLossToPlayer(currentPlayers[3].name);
         winningTeamPlayers = [currentPlayers[0].name, currentPlayers[1].name];
         losingTeamPlayers = [currentPlayers[2].name, currentPlayers[3].name];
+        jsConfetti.addConfetti({
+          confettiColors: ["#2196f3"],
+        });
         break;
 
       case "ORANGE":
@@ -96,6 +101,9 @@ function CurrentMatch(props) {
         props.addLossToPlayer(currentPlayers[1].name);
         winningTeamPlayers = [currentPlayers[2].name, currentPlayers[3].name];
         losingTeamPlayers = [currentPlayers[0].name, currentPlayers[1].name];
+        jsConfetti.addConfetti({
+          confettiColors: ["#ff9800"],
+        });
         break;
 
       default:
