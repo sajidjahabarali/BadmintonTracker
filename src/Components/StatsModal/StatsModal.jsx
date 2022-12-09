@@ -8,6 +8,10 @@ import BasePlayerStatsTable from "../StatsTables/BasePlayerStatsTable/BasePlayer
 import TeammateOpponentToggle from "../TeammateOpponentToggle/TeammateOpponentToggle";
 import "./StatsModal.css";
 import { createShallowCopy } from "../../common.utils";
+import {
+  mapPairingsToOpponentPlayerStats,
+  mapPairingsToTeammatePlayerStats,
+} from "../common.utils";
 
 const style = {
   position: "absolute",
@@ -36,41 +40,10 @@ function StatsModal(props) {
     const pairingsCopy = createShallowCopy(props.pairings);
 
     setTeammatePlayerStats(
-      pairingsCopy
-        .filter((pairing) => pairing.players.includes(props.player.name))
-        .map((pairing) => {
-          return {
-            name: pairing.players.find(
-              (player) => player !== props.player.name
-            ),
-            wins: pairing.teammates.wins,
-            losses: pairing.teammates.losses,
-            actualMatchesPlayed: pairing.teammates.matchesPlayed,
-            streak: pairing.teammates.streak,
-          };
-        })
+      mapPairingsToTeammatePlayerStats(props.player.name, pairingsCopy)
     );
     setOpponentPlayerStats(
-      pairingsCopy
-        .filter((pairing) => pairing.players.includes(props.player.name))
-        .map((pairing) => {
-          const isPlayer1 = pairing.players[0] === props.player.name;
-          return {
-            name: pairing.players.find(
-              (player) => player !== props.player.name
-            ),
-            wins: isPlayer1
-              ? pairing.opponents.player1WinsAndPlayer2Losses
-              : pairing.opponents.player2WinsAndPlayer1Losses,
-            losses: isPlayer1
-              ? pairing.opponents.player2WinsAndPlayer1Losses
-              : pairing.opponents.player1WinsAndPlayer2Losses,
-            actualMatchesPlayed: pairing.opponents.matchesPlayed,
-            streak: isPlayer1
-              ? pairing.opponents.player1WinStreakAndPlayer2LossStreak
-              : 0 - pairing.opponents.player1WinStreakAndPlayer2LossStreak,
-          };
-        })
+      mapPairingsToOpponentPlayerStats(props.player.name, pairingsCopy)
     );
   }, [props.pairings, props.player]);
 

@@ -83,3 +83,42 @@ export const getPlayerDetailsColumnHeaders = () => [
   { align: "right", column: "winRate", iconClassName: ["percent"] },
   { align: "right", column: "streak", iconClassName: ["plus", "minus"] },
 ];
+
+export const mapPairingsToTeammatePlayerStats = (playerName, pairings) => {
+  const teammatePlayerStats = pairings
+    .filter((pairing) => pairing.players.includes(playerName))
+    .map((pairing) => {
+      return {
+        name: pairing.players.find((player) => player !== playerName),
+        wins: pairing.teammates.wins,
+        losses: pairing.teammates.losses,
+        actualMatchesPlayed: pairing.teammates.matchesPlayed,
+        streak: pairing.teammates.streak,
+      };
+    });
+
+  return teammatePlayerStats;
+};
+
+export const mapPairingsToOpponentPlayerStats = (playerName, pairings) => {
+  const opponentPlayerStats = pairings
+    .filter((pairing) => pairing.players.includes(playerName))
+    .map((pairing) => {
+      const isPlayer1 = pairing.players[0] === playerName;
+      return {
+        name: pairing.players.find((player) => player !== playerName),
+        wins: isPlayer1
+          ? pairing.opponents.player1WinsAndPlayer2Losses
+          : pairing.opponents.player2WinsAndPlayer1Losses,
+        losses: isPlayer1
+          ? pairing.opponents.player2WinsAndPlayer1Losses
+          : pairing.opponents.player1WinsAndPlayer2Losses,
+        actualMatchesPlayed: pairing.opponents.matchesPlayed,
+        streak: isPlayer1
+          ? pairing.opponents.player1WinStreakAndPlayer2LossStreak
+          : 0 - pairing.opponents.player1WinStreakAndPlayer2LossStreak,
+      };
+    });
+
+  return opponentPlayerStats;
+};

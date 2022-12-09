@@ -71,14 +71,7 @@ function IndividualPlayerStatsTable(props) {
           tableName={"individualPlayerStatsTable"}
           saveImagesButtons={{
             elementId: "individualPlayerStatsTable",
-            // individualPlayerStatsTable: {
-            //   iconName: "image",
-            //   tableName: ["individualPlayerStatsTable"],
-            // },
-            // relativePlayerStatsTables: {
-            //   iconName: "images",
-            //   tableName: ["individualPlayerStatsTable"],
-            // },
+            newElements: {},
           }}
         ></BasePlayerStatsTable>
       </div>

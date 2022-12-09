@@ -272,7 +272,7 @@ const reducer = (state = INITIAL_STATE, action) => {
   if (newPairingsState.length === 0) {
     newPairingsState = pairingsCopy;
   } else {
-    matchMakingMetricsLogs(newPlayerDetailsState, newPairingsState);
+    // matchMakingMetricsLogs(newPlayerDetailsState, newPairingsState);
   }
 
   return {
