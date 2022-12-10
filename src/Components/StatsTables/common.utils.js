@@ -22,7 +22,8 @@ export const renderAndSaveImagesButtonHandler = (
   if (idPrefix) {
     playerNames.forEach((playerName) => {
       const id = idPrefix + playerName;
-      const screenshotTarget = document.getElementById(id);
+      const screenshotTarget = document.getElementById(id).children[0];
+      console.log(screenshotTarget);
       html2canvas(screenshotTarget, {
         scale: 0.9,
       }).then((canvas) => {
@@ -33,6 +34,6 @@ export const renderAndSaveImagesButtonHandler = (
         download(base64image, id + ".jpeg", "image/jpeg");
       });
     });
-    setRender(false);
+    // setRender(false);
   }
 };

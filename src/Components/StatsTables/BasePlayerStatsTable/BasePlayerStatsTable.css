@@ -1,12 +1,62 @@
 .hidden{
-  height: 0;
-  overflow: hidden;
+  /* height: 0; */
+  /* overflow: hidden; */
 }
 
 .hidden .relativeStatsContainer{
   margin: 40px 0;
 }
 
-.relativeStatsSubContainer {
-  margin: 20px 0;
+.relativeStatsContainerWrapper{
+  position: relative;
+  height:100vh;
+}
+
+.relativeStatsContainer{
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  width: 200%;
+}
+
+.box {
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  background-color: red;
+  width: 200%;
+  height: 300px;
+}
+
+.relativeStatsSubContainerWrapper{
+  position: relative;
+}
+
+.innerBoxContainer{
+  position: relative;
+}
+
+.relativeStatsTeammateContainer, .relativeStatsOpponentContainer{
+  position: absolute;
+  width: 45%;
+  margin: 0 10px;
+}
+
+.leftBox, .rightBox{
+  position: absolute;
+  width: 50%;
+  height: 200px;
+}
+
+.relativeStatsOpponentContainer{
+  right:0
+}
+
+.leftBox{
+  background-color: blue;
+}
+
+.rightBox{
+  background-color: green;
+  right: 0;
 }

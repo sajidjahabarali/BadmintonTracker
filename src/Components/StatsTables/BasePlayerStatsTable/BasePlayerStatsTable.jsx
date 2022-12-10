@@ -135,19 +135,33 @@ function BasePlayerStatsTable(props) {
       <div className="hidden">
         {props.data.map((player, index) => {
           return (
-            <div key={index} id={relativeStatsContainerIdPrefix + player.name}>
-              <div className="relativeStatsSubContainer">
-                <Typography>{player.name}'s Teammate Stats</Typography>
-                {getTable(
-                  mapPairingsToTeammatePlayerStats(player.name, props.pairings)
-                )}
-              </div>
+            <div className="relativeStatsContainerWrapper">
+              <div
+                key={index}
+                id={relativeStatsContainerIdPrefix + player.name}
+                className="relativeStatsContainer"
+              >
+                <div className="relativeStatsSubContainerWrapper">
+                  <div className="relativeStatsTeammateContainer">
+                    <Typography>{player.name}'s Teammate Stats</Typography>
+                    {getTable(
+                      mapPairingsToTeammatePlayerStats(
+                        player.name,
+                        props.pairings
+                      )
+                    )}
+                  </div>
 
-              <div className="relativeStatsSubContainer">
-                <Typography>{player.name}'s Opponents Stats</Typography>
-                {getTable(
-                  mapPairingsToOpponentPlayerStats(player.name, props.pairings)
-                )}
+                  <div className="relativeStatsOpponentContainer">
+                    <Typography>{player.name}'s Opponents Stats</Typography>
+                    {getTable(
+                      mapPairingsToOpponentPlayerStats(
+                        player.name,
+                        props.pairings
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           );
@@ -180,7 +194,14 @@ function BasePlayerStatsTable(props) {
       <ThemeProvider theme={theme}>
         {getTable()}
         {getSaveTableButtons()}
+        {/* <div className="box">
+          <div className="innerBoxContainer">
+            <div className="leftBox"></div>
+            <div className="rightBox"></div>
+          </div>
+        </div> */}
         {renderAllRelativeStats && getHiddenRelativeStatsTables()}
+        {/* {true && getHiddenRelativeStatsTables()} */}
       </ThemeProvider>
     </div>
   );
